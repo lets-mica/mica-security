@@ -1,0 +1,59 @@
+<html xmlns:x="http://www.w3.org/1999/html">
+<div class="easyui-layout" data-options="fit:true,border:false" >
+    <div data-options="region:'center',border:false" style="overflow: hidden;padding: 3px;" >
+        <form id="sysDictAddForm" method="post">
+            <table class="grid">
+                <tr>
+                    <td>类别</td>
+                    <td>
+                        <x:select name="dictType" class="easyui-combobox" data-options="width:160,height:29,editable:true,panelHeight:'auto'"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>键</td>
+                    <td><input name="dictKey" type="text" placeholder="请输入键" class="easyui-validatebox" data-options="required:true"></td>
+                </tr>
+                <tr>
+                    <td>值</td>
+                    <td><input name="dictValue" type="text" placeholder="请输入值" class="easyui-validatebox" data-options="required:true"></td>
+                </tr>
+                <tr>
+                    <td>描述</td>
+                    <td><textarea name="dictDesc"></textarea></td>
+                </tr>
+                <tr>
+                    <td>排序</td>
+                    <td><input name="seq" type="text" placeholder="请输入排序" value="0" class="easyui-numberspinner"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function() {
+        $('#sysDictAddForm').form({
+            url : basePath + '/sysDict/add',
+            onSubmit : function() {
+                progressLoad();
+                var isValid = $(this).form('validate');
+                if (!isValid) {
+                    progressClose();
+                }
+                return isValid;
+            },
+            success : function(result) {
+                progressClose();
+                result = $.parseJSON(result);
+                if (result.code === 1) {
+                    //之所以能在这里调用到parent.$.modalDialog.openner_dataGrid这个对象，是因为list页面预定义好了
+                    parent.$.modalDialog.openner_dataGrid.datagrid('reload');
+                    parent.$.modalDialog.handler.dialog('close');
+                    top.initDicts();
+                } else {
+                    var form = $('#sysDictAddForm');
+                    parent.$.messager.alert('错误', result.msg, 'error');
+                }
+            }
+        });
+    });
+</script>

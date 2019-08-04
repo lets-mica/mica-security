@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout}">
+
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/css/login.css}">
+    <script type="text/javascript" th:src="@{/static/js/login.js}"></script>
+</head>
+
+<body layout:fragment="body">
+<div class="crm-register-bg">
+    <div class="crm-register-form">
+        <header class="crm-login1-header">
+            <h1>欢迎登录-如梦技术</h1>
+        </header>
+        <form id="loginform" class="easyui-form" method="post" data-options="novalidate:true">
+            <div class="crm-register-body crm-login1-body">
+                <div class="crm-register-input-warpper">
+                    <input type="text" class="crm-register-input easyui-validatebox" data-options="tipPosition:'bottom',required:true,validType:'length[2,20]'" name="username" placeholder="请输入用户名" tabindex="1">
+                </div>
+                <div class="crm-register-input-warpper">
+                    <input type="password" class="crm-register-input easyui-validatebox" data-options="tipPosition:'bottom',required:true" name="password" placeholder="请输入密码" tabindex="1">
+                </div>
+                <div class="crm-register-input-warpper">
+                    <input type="text" class="crm-register-input easyui-validatebox" data-options="tipPosition:'bottom',required:true" name="code" placeholder="请输入验证码" tabindex="1" style="width: 68%;">
+                    <img id="captcha" alt="验证码" th:src="@{/captcha.jpg}" th:data-src="@{/captcha.jpg?t=}" style="margin-bottom: 3px;vertical-align: middle;border-radius: 4px;cursor: pointer;">
+                </div>
+                <div class="crm-register-remember-me">
+                    <input type="checkbox" name="remember-me" value="true" checked/> 记住密码
+                </div>
+            </div>
+            <div class="crm-register-footer">
+                <button type="submit" class="pg-btn-submit dinline-block" tabindex="3" act="login_btn">登     录</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>

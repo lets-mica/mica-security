@@ -1,0 +1,62 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:x="http://www.w3.org/1999/html">
+<div class="easyui-layout" data-options="fit:true,border:false">
+    <div data-options="region:'center',border:false" title="" style="overflow: hidden;padding: 3px;">
+        <form id="sysDictEditForm" method="post">
+            <table class="grid">
+                <input name="id" type="hidden" th:value="${sysDict.id}">
+                <tr>
+                    <td>类别</td>
+                    <td>
+                        <x:select id="sysDictEditDictType" name="dictType" class="easyui-combobox" data-options="width:160,height:29,editable:false,panelHeight:'auto'"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>键</td>
+                    <td><input name="dictKey" type="text" placeholder="请输入键" class="easyui-validatebox" data-options="required:true" th:value="${sysDict.dictKey}"></td>
+                </tr>
+                <tr>
+                    <td>值</td>
+                    <td><input name="dictValue" type="text" placeholder="请输入值" class="easyui-validatebox" data-options="required:true" th:value="${sysDict.dictValue}"></td>
+                </tr>
+                <tr>
+                    <td>描述</td>
+                    <td><textarea name="dictDesc" th:text="${sysDict.dictDesc}"></textarea></td>
+                </tr>
+                <tr>
+                    <td>排序</td>
+                    <td><input name="seq" type="text" placeholder="请输入排序" class="easyui-numberspinner" th:value="${sysDict.seq}"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" th:inline="javascript">
+    $(function() {
+        $('#sysDictEditForm').form({
+            url : basePath + '/sysDict/edit',
+            onSubmit : function() {
+                progressLoad();
+                var isValid = $(this).form('validate');
+                if (!isValid) {
+                    progressClose();
+                }
+                return isValid;
+            },
+            success : function(result) {
+                progressClose();
+                result = $.parseJSON(result);
+                if (result.code === 1) {
+                    //之所以能在这里调用到parent.$.modalDialog.openner_dataGrid这个对象，是因为list页面预定义好了
+                    parent.$.modalDialog.openner_dataGrid.datagrid('reload');
+                    parent.$.modalDialog.handler.dialog('close');
+                    top.initDicts();
+                } else {
+                    var form = $('#sysDictEditForm');
+                    parent.$.messager.alert('错误', result.msg, 'error');
+                }
+            }
+        });
+
+        $("#sysDictEditDictType").val('[[${sysDict.dictType}]]');
+    });
+</script>

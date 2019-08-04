@@ -1,0 +1,76 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:x="http://www.w3.org/1999/html">
+<div class="easyui-layout" data-options="fit:true,border:false">
+    <div data-options="region:'center',border:false" title="" style="overflow: hidden;padding: 3px;">
+        <form id="organizationEditForm" method="post">
+            <table class="grid">
+                <tr>
+                    <td>编号</td>
+                    <td>
+                        <input name="id" type="hidden" th:value="${organization.id}">
+                        <input name="code" type="text" th:value="${organization.code}" />
+                    </td>
+                    <td>资源名称</td>
+                    <td>
+                        <input name="name" type="text" th:value="${organization.name}" placeholder="请输入部门名称" class="easyui-validatebox" data-options="required:true" >
+                    </td>
+                </tr>
+                <tr>
+                    <td>排序</td>
+                    <td><input name="seq"  class="easyui-numberspinner" th:value="${organization.seq}" style="widtd: 140px; height: 29px;" required="required" data-options="editable:false"></td>
+                    <td>图标</td>
+                    <td ><input name="iconCls" th:value="${organization.iconCls}" onclick='top.window.openIconDialog(this)'/></td>
+                </tr>
+                <tr>
+                    <td>状态</td>
+                    <td>
+                        <x:select id="organizationEditStatus" name="status" type="dbStatus" class="easyui-combobox" data-options="width:160,height:29,editable:false,panelHeight:'auto'"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>地址</td>
+                    <td colspan="3"><input name="address" style="width: 300px;" th:value="${organization.address}"/></td>
+                </tr>
+                <tr>
+                    <td>上级资源</td>
+                    <td colspan="3">
+                        <select id="organizationEditPid" name="pid" style="width: 200px; height: 29px;"></select>
+                        <a class="easyui-linkbutton" href="javascript:void(0)" onclick="$('#pid').combotree('clear');" >清空</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" th:inline="javascript">
+    $(function() {
+        $('#organizationEditPid').combotree({
+            url : basePath + '/organization/tree?flag=false',
+            parentField : 'pid',
+            panelHeight : 'auto',
+            value :'[[${organization.pid}]]'
+        });
+        $('#organizationEditForm').form({
+            url : basePath + '/organization/edit',
+            onSubmit : function() {
+                progressLoad();
+                var isValid = $(this).form('validate');
+                if (!isValid) {
+                    progressClose();
+                }
+                return isValid;
+            },
+            success : function(result) {
+                progressClose();
+                result = $.parseJSON(result);
+                if (result.code === 1) {
+                    parent.$.modalDialog.openner_dataGrid.datagrid('reload');
+                    parent.$.modalDialog.handler.dialog('close');
+                } else {
+                    parent.$.messager.alert('错误', result.msg, 'error');
+                }
+            }
+        });
+
+        $("#organizationEditStatus").val('[[${organization.status}]]');
+    });
+</script>

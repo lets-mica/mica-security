@@ -1,0 +1,240 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div class="easyui-layout" data-options="fit:true,border:false">
+    <div data-options="region:'north',border:false" style="height: 32px; line-height: 32px;padding: 2px 5px;overflow: hidden;">
+        <form id="adminSearchForm">
+            <table>
+                <tr>
+                    <th>姓名:</th>
+                    <td><input name="name" placeholder="请输入用户姓名"/></td>
+                    <th>创建时间:</th>
+                    <td>
+                        <input class="Wdate" name="createdateStart" placeholder="点击选择时间" onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" />至
+                        <input class="Wdate" name="createdateEnd" placeholder="点击选择时间" onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" />
+                        <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'glyphicon-search',plain:true" onclick="adminSearchFun();">查询</a>
+                        <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'glyphicon-remove-circle',plain:true" onclick="adminCleanFun();">清空</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div data-options="region:'center',border:true">
+        <table id="adminDataGrid" data-options="fit:true,border:false"></table>
+    </div>
+    <div data-options="region:'west',border:true,collapsible:false,title:'组织机构'" style="width:150px;overflow: hidden; ">
+        <ul id="organizationTree" style="width:160px;margin: 10px 10px 10px 10px"></ul>
+    </div>
+</div>
+<div id="adminToolbar" style="display: none;">
+    <div th:if="${@sec.hasPermission('admin:add')}">
+        <a onclick="adminAddFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'glyphicon-plus icon-green'">添加</a>
+    </div>
+</div>
+
+<script type="text/javascript" th:inline="javascript">
+    var adminDataGrid;
+    var organizationTree;
+    $(function() {
+        organizationTree = $('#organizationTree').tree({
+            url : basePath + '/organization/tree',
+            parentField : 'pid',
+            onClick : function(node) {
+                adminDataGrid.datagrid('load', {
+                    organizationId: node.id
+                });
+            }
+        });
+        adminDataGrid = $('#adminDataGrid').datagrid({
+            url : basePath + '/admin/dataGrid',
+            fit : true,
+            striped : true,
+            rownumbers : true,
+            pagination : true,
+            singleSelect : true,
+            idField : 'id',
+            sortName : 'createTime',
+            sortOrder : 'asc',
+            pageSize : 20,
+            pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ],
+            frozenColumns : [ [ {
+                title : '编号',
+                field : 'id',
+                width : 40
+            } ] ],
+            columns : [ [ {
+                width : '80',
+                title : '登录名',
+                field : 'username',
+                sortable : true
+            }, {
+                width : '80',
+                title : '姓名',
+                field : 'name',
+                sortable : true
+            },{
+                width : '80',
+                title : '部门ID',
+                field : 'organizationId',
+                hidden : true
+            },{
+                width : '80',
+                title : '所属部门',
+                field : 'organizationName'
+            }, {
+                width : '40',
+                title : '性别',
+                field : 'sex',
+                sortable : true,
+                formatter : function(value, row, index) {
+                    return top.columnsDictFormat("adminSex", value);
+                }
+            }, {
+                width : '40',
+                title : '年龄',
+                field : 'age',
+                sortable : true
+            }, {
+                width : '120',
+                title : '邮箱',
+                field : 'email'
+            }, {
+                width : '120',
+                title : '电话',
+                field : 'phone'
+            }, {
+                width : '200',
+                title : '角色',
+                field : 'rolesList'
+            }, {
+                width : '60',
+                title : '用户类型',
+                field : 'userType',
+                sortable : true,
+                formatter : function(value, row, index) {
+                    return top.columnsDictFormat("adminType", value);
+                }
+            }, {
+                width : '60',
+                title : '锁定',
+                field : 'locked',
+                sortable : true,
+                formatter : function(value, row, index) {
+                    return top.columnsDictFormat("adminLocked", value);
+                }
+            }, {
+                width : '130',
+                title : '创建时间',
+                field : 'createTime',
+                sortable : true
+            }, {
+                field : 'action',
+                title : '操作',
+                width : 200,
+                formatter : function(value, row, index) {
+                    var str = '';
+                    /*[# th:if="${@sec.hasPermission('admin:edit')}"]*/
+                    str += $.formatString('<a href="javascript:void(0)" class="admin-easyui-linkbutton-edit" data-options="plain:true,iconCls:\'glyphicon-pencil icon-blue\'" onclick="adminEditFun(\'{0}\');" >编辑</a>', row.id);
+                    /*[/]*/
+                    /*[# th:if="${@sec.hasPermission('admin:delete')}"]*/
+                    str += '&nbsp;&nbsp;|&nbsp;&nbsp;';
+                    str += $.formatString('<a href="javascript:void(0)" class="admin-easyui-linkbutton-del" data-options="plain:true,iconCls:\'glyphicon-trash icon-red\'" onclick="adminDeleteFun(\'{0}\');" >删除</a>', row.id);
+                    /*[/]*/
+                    return str;
+                }
+            } ] ],
+            onLoadSuccess:function(data){
+                $('.admin-easyui-linkbutton-edit').linkbutton({text:'编辑'});
+                $('.admin-easyui-linkbutton-del').linkbutton({text:'删除'});
+            },
+            toolbar : '#adminToolbar'
+        });
+    });
+
+    /**
+     * 添加框
+     * @param url
+     */
+    function adminAddFun() {
+        parent.$.modalDialog({
+            title : '添加',
+            width : 520,
+            height : 350,
+            href : basePath + '/admin/addPage',
+            buttons : [ {
+                text : '确定',
+                handler : function() {
+                    parent.$.modalDialog.openner_dataGrid = adminDataGrid;//因为添加成功之后，需要刷新这个treeGrid，所以先预定义好
+                    var f = parent.$.modalDialog.handler.find('#adminAddForm');
+                    f.submit();
+                }
+            } ]
+        });
+    }
+
+    /**
+     * 编辑
+     */
+    function adminEditFun(id) {
+        if (id === undefined) {
+            var rows = adminDataGrid.datagrid('getSelections');
+            id = rows[0].id;
+        } else {
+            adminDataGrid.datagrid('unselectAll').datagrid('uncheckAll');
+        }
+        parent.$.modalDialog({
+            title : '编辑',
+            width : 520,
+            height : 350,
+            href : basePath + '/admin/editPage?id=' + id,
+            buttons : [ {
+                text : '确定',
+                handler : function() {
+                    parent.$.modalDialog.openner_dataGrid = adminDataGrid;//因为添加成功之后，需要刷新这个dataGrid，所以先预定义好
+                    var f = parent.$.modalDialog.handler.find('#adminEditForm');
+                    f.submit();
+                }
+            } ]
+        });
+    }
+
+    /**
+     * 删除
+     */
+    function adminDeleteFun(id) {
+        if (id === undefined) {//点击右键菜单才会触发这个
+            var rows = adminDataGrid.datagrid('getSelections');
+            id = rows[0].id;
+        } else {//点击操作里面的删除图标会触发这个
+            adminDataGrid.datagrid('unselectAll').datagrid('uncheckAll');
+        }
+        parent.$.messager.confirm('询问', '您是否要删除当前用户？', function(b) {
+            if (b) {
+                progressLoad();
+                $.post(basePath + '/admin/delete', {
+                    id : id
+                }, function(result) {
+                    if (result.code === 1) {
+                        parent.$.messager.alert('提示', result.msg, 'info');
+                        adminDataGrid.datagrid('reload');
+                    }
+                    progressClose();
+                }, 'JSON');
+            }
+        });
+    }
+
+    /**
+     * 清除
+     */
+    function adminCleanFun() {
+        $('#adminSearchForm input').val('');
+        adminDataGrid.datagrid('load', {});
+    }
+
+    /**
+     * 搜索
+     */
+    function adminSearchFun() {
+        adminDataGrid.datagrid('load', $.serializeObject($('#adminSearchForm')));
+    }
+</script>

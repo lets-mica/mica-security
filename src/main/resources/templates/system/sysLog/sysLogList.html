@@ -1,0 +1,53 @@
+<div class="easyui-layout" data-options="fit:true,border:false">
+    <div data-options="region:'center',border:false">
+        <table id="sysLogDataGrid" data-options="fit:true,border:false"></table>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('#sysLogDataGrid').datagrid({
+            url: basePath + '/sysLog/dataGrid',
+            striped: true,
+            pagination: true,
+            singleSelect: true,
+            idField: 'id',
+            pageSize: 20,
+            pageList: [10, 20, 30, 40, 50, 100, 200, 300, 400, 500],
+            frozenColumns : [ [ {
+                width : 60,
+                title : '编号',
+                field : 'id',
+                sortable : true
+            } ] ],
+            columns: [ [ {
+                width : 60,
+                title : '登陆名',
+                field : 'username'
+            }, {
+                width : 200,
+                title : '角色名',
+                field : 'roleName'
+            }, {
+                width : 80,
+                title : '操作',
+                field : 'operation'
+            }, {
+                width : 150,
+                title : '类-方法',
+                field : 'classMethod'
+            }, {
+                width : 350,
+                title : '内容',
+                field : 'content'
+            }, {
+                width : 100,
+                title : '客户端ip',
+                field : 'clientIp'
+            }, {
+                width: 120,
+                title: '登录时间',
+                field: 'createTime'
+            }] ]
+        });
+    });
+</script>

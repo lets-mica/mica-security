@@ -1,0 +1,95 @@
+<html xmlns:x="http://www.w3.org/1999/html">
+<div class="easyui-layout" data-options="fit:true,border:false" >
+    <div data-options="region:'center',border:false" style="overflow: hidden;padding: 3px;" >
+        <form id="adminAddForm" method="post">
+            <table class="grid">
+                <tr>
+                    <td>登录名</td>
+                    <td><input name="username" type="text" placeholder="请输入登录名称" class="easyui-validatebox" data-options="required:true"></td>
+                    <td>姓名</td>
+                    <td><input name="name" type="text" placeholder="请输入姓名" class="easyui-validatebox" data-options="required:true"></td>
+                </tr>
+                <tr>
+                    <td>电话</td>
+                    <td>
+                        <input type="text" name="phone" placeholder="请输入手机号" class="easyui-numberbox"/>
+                    </td>
+                    <td>邮箱</td>
+                    <td>
+                        <input type="text" name="email" placeholder="请输入邮箱" class="easyui-validatebox" data-options="required:true,validType:'email'"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>密码</td>
+                    <td><input name="password" type="password" placeholder="请输入密码" class="easyui-validatebox" data-options="required:true"></td>
+                    <td>性别</td>
+                    <td>
+                        <x:select name="sex" type="adminSex" class="easyui-combobox" data-options="width:160,height:29,editable:false,panelHeight:'auto'"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>年龄</td>
+                    <td><input type="text" name="age" class="easyui-numberbox"/></td>
+                    <td>用户类型</td>
+                    <td>
+                        <x:select name="userType" type="adminType" class="easyui-combobox" data-options="width:160,height:29,editable:false,panelHeight:'auto'"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>部门</td>
+                    <td><select id="adminAddOrganizationId" name="organizationId" class="easyui-validatebox" data-options="width:160,height:29,required:true" ></select></td>
+                    <td>角色</td>
+                    <td><select id="adminAddRoleIds" name="roleIds" data-options="width:160,height:29,editable:false,panelHeight:'auto'"></select></td>
+                </tr>
+                <tr>
+                    <td>是否锁定</td>
+                    <td>
+                        <x:select id="adminAddLocked" name="locked" type="adminLocked" class="easyui-combobox" data-options="width:160,height:29,editable:false,panelHeight:'auto'"/>
+                    </td>
+                    <td>用户状态</td>
+                    <td>
+                        <x:select name="status" type="dbStatus" class="easyui-combobox" data-options="width:160,height:29,editable:false,panelHeight:'auto'"></x:select>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function() {
+        $('#adminAddOrganizationId').combotree({
+            url: basePath + '/organization/tree',
+            parentField : 'pid',
+            panelHeight : 'auto'
+        });
+
+        $('#adminAddRoleIds').combotree({
+            url: basePath + '/role/tree',
+            multiple: true,
+            required: true,
+            panelHeight : 'auto'
+        });
+
+        $('#adminAddForm').form({
+            url : basePath + '/admin/add',
+            onSubmit : function() {
+                progressLoad();
+                var isValid = $(this).form('validate');
+                if (!isValid) {
+                    progressClose();
+                }
+                return isValid;
+            },
+            success : function(result) {
+                progressClose();
+                result = $.parseJSON(result);
+                if (result.code === 1) {
+                    parent.$.modalDialog.openner_dataGrid.datagrid('reload');
+                    parent.$.modalDialog.handler.dialog('close');
+                } else {
+                    parent.$.messager.alert('错误', result.msg, 'error');
+                }
+            }
+        });
+    });
+</script>

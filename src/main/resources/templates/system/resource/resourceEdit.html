@@ -1,0 +1,91 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:x="http://www.w3.org/1999/html">
+<div class="easyui-layout" data-options="fit:true,border:false">
+    <div data-options="region:'center',border:false" title="" style="overflow: hidden;padding: 3px;">
+        <form id="resourceEditForm" method="post">
+            <table  class="grid">
+                <tr>
+                    <td>资源名称</td>
+                    <td>
+                        <input name="id" type="hidden" th:value="${resource.id}" >
+                        <input name="name" type="text" placeholder="请输入资源名称" th:value="${resource.name}" class="easyui-validatebox" data-options="required:true" >
+                    </td>
+                    <td>资源类型</td>
+                    <td>
+                        <x:select id="resourceEditType" type="resourceType" name="resourceType" class="easyui-combobox" data-options="width:160,height:29,editable:false,panelHeight:'auto'"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>资源路径</td>
+                    <td><input name="url" type="text" th:value="${resource.url}" placeholder="请输入资源路径" class="easyui-validatebox" ></td>
+                    <td>打开方式</td>
+                    <td>
+                        <x:select default="无(用于上层菜单)" type="resourceOpenMode" id="resourceEditOpenMode" name="openMode" class="easyui-combobox" data-options="width:160,height:29,editable:false,panelHeight:'auto'"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>菜单图标</td>
+                    <td><input name="iconCls" th:value="${resource.iconCls}" onclick='top.window.openIconDialog(this)'/></td>
+                    <td>排序</td>
+                    <td><input name="seq" th:value="${resource.seq}" class="easyui-numberspinner" required="required" data-options="editable:false"></td>
+                </tr>
+                <tr>
+                    <td>状态</td>
+                    <td>
+                        <x:select id="resourceEditStatus" name="status" type="dbStatus" class="easyui-combobox" data-options="width:160,height:29,editable:false,panelHeight:'auto'"/>
+                    </td>
+                    <td>菜单状态</td>
+                    <td>
+                        <x:select id="resourceEditOpened" name="opened" type="resourceOpened" class="easyui-combobox" data-options="width:160,height:29,editable:false,panelHeight:'auto'"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>权限表达式</td>
+                    <td colspan="3"><input name="permissions" th:value="${resource.permissions}" style="width: 200px;"/></td>
+                </tr>
+                <tr>
+                    <td>上级资源</td>
+                    <td colspan="3">
+                        <select id="resourceEditPid" name="pid" style="width: 200px; height: 29px;"></select>
+                        <a class="easyui-linkbutton" href="javascript:void(0)" onclick="$('#pid').combotree('clear');" >清空</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" th:inline="javascript">
+    $(function() {
+        $('#resourceEditPid').combotree({
+            url : basePath + '/resource/allMenu',
+            parentField : 'pid',
+            panelHeight : 'auto',
+            value : '[[${resource.pid}]]'
+        });
+        $('#resourceEditForm').form({
+            url : basePath + '/resource/edit',
+            onSubmit : function() {
+                progressLoad();
+                var isValid = $(this).form('validate');
+                if (!isValid) {
+                    progressClose();
+                }
+                return isValid;
+            },
+            success : function(result) {
+                progressClose();
+                result = $.parseJSON(result);
+                if (result.code === 1) {
+                    parent.$.modalDialog.openner_dataGrid.treegrid('reload');
+                    parent.layoutWestTree.tree('reload');
+                    parent.$.modalDialog.handler.dialog('close');
+                } else {
+                    parent.$.messager.alert('错误', result.msg, 'error');
+                }
+            }
+        });
+        $("#resourceEditStatus").val("[[${resource.status}]]");
+        $("#resourceEditType").val("[[${resource.resourceType}]]");
+        $("#resourceEditOpenMode").val("[[${resource.openMode}]]");
+        $("#resourceEditOpened").val("[[${resource.opened ? '1' : '0'}]]");
+    });
+</script>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="utf-8"/>
+    <title>如梦技术</title>
+    <link rel="icon" type="image/x-icon" th:href="@{/static/favicon.ico}">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/js/jquery-easyui/themes/gray/easyui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/js/jquery-easyui/themes/icon.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/js/jquery-easyui/themes/color.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/css/icon.css}">
+    <script type="text/javascript" th:src="@{/static/js/My97DatePicker/WdatePicker.js}"></script>
+    <script type="text/javascript">
+        var basePath = '[[${#httpServletRequest.getContextPath()}]]';
+        window.UEDITOR_HOME_URL = basePath + "/static/js/ueditor/";
+        window.UEDITOR_SERVER_URL = basePath + "/ueditor";
+    </script>
+    <script type="text/javascript" th:src="@{/static/js/jquery-easyui/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/jquery-easyui/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/arrayToTree.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/extJs.js?v=20180425}"></script>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body layout:fragment="body" style="visibility: hidden;">
+    layout
+</body>
+</html>

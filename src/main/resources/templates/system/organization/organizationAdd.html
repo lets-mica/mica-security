@@ -1,0 +1,68 @@
+<html xmlns:x="http://www.w3.org/1999/html">
+<div class="easyui-layout" data-options="fit:true,border:false" >
+    <div data-options="region:'center',border:false" style="overflow: hidden;padding: 3px;" >
+        <form id="organizationAddForm" method="post">
+            <table class="grid">
+                <tr>
+                    <td>编号</td>
+                    <td><input name="code" type="text" placeholder="请输入部门编号" class="easyui-validatebox" data-options="required:true" ></td>
+                    <td>部门名称</td>
+                    <td><input name="name" type="text" placeholder="请输入部门名称" class="easyui-validatebox" data-options="required:true" ></td>
+                </tr>
+                <tr>
+                    <td>排序</td>
+                    <td><input name="seq" class="easyui-numberspinner" style="width: 140px; height: 29px;" required="required" data-options="editable:false" value="0"></td>
+                    <td>图标</td>
+                    <td><input name="iconCls" onclick='top.window.openIconDialog(this)'/></td>
+                </tr>
+                <tr>
+                    <td>状态</td>
+                    <td>
+                        <x:select name="status" class="easyui-combobox" type="dbStatus" data-options="width:160,height:29,editable:false,panelHeight:'auto'"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>上级部门</td>
+                    <td colspan="3">
+                        <select id="organizationAddPid" name="pid" style="width:200px;height: 29px;"></select>
+                        <a class="easyui-linkbutton" href="javascript:void(0)" onclick="$('#pid').combotree('clear');" >清空</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>地址</td>
+                    <td colspan="3"><input name="address" style="width: 300px;"/></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function() {
+        $('#organizationAddPid').combotree({
+            url : basePath + '/organization/tree?flag=false',
+            parentField : 'pid',
+            panelHeight : 'auto'
+        });
+        $('#organizationAddForm').form({
+            url : basePath + '/organization/add',
+            onSubmit : function() {
+                progressLoad();
+                var isValid = $(this).form('validate');
+                if (!isValid) {
+                    progressClose();
+                }
+                return isValid;
+            },
+            success : function(result) {
+                progressClose();
+                result = $.parseJSON(result);
+                if (result.code === 1) {
+                    parent.$.modalDialog.openner_dataGrid.datagrid('reload');
+                    parent.$.modalDialog.handler.dialog('close');
+                } else {
+                    parent.$.messager.alert('错误', result.msg, 'error');
+                }
+            }
+        });
+    });
+</script>

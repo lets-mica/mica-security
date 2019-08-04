@@ -1,0 +1,163 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:x="http://www.w3.org/1999/html">
+
+<div class="easyui-layout" data-options="fit:true,border:false">
+    <div data-options="region:'north',border:false" style="height: 32px; line-height: 32px;padding: 2px 5px;overflow: hidden;">
+        <form id="sysDictSearchForm">
+            <table>
+                <tr>
+                    <th>类型:</th>
+                    <td>
+                        <x:select name="dictType" class="easyui-combobox" data-options="width:140,editable:true,panelHeight:'auto'"/>
+                    </td>
+                    <th>键:</th>
+                    <td><input name="dictKey" class="easyui-text"/></td>
+                    <th>值:</th>
+                    <td><input name="dictValue" class="easyui-text"/></td>
+                    <th>创建时间:</th>
+                    <td>
+                        <input class="Wdate" name="createdateStart" placeholder="点击选择时间" onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" />至
+                        <input class="Wdate" name="createdateEnd" placeholder="点击选择时间" onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" />
+                        <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'glyphicon-search',plain:true" onclick="sysDictSearchFun();">查询</a>
+                        <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'glyphicon-remove-circle',plain:true" onclick="sysDictCleanFun();">清空</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+     </div>
+    <div data-options="region:'center',border:false">
+        <table id="sysDictDataGrid" data-options="fit:true,border:false"></table>
+    </div>
+</div>
+<div id="sysDictToolbar" style="display: none;">
+    <div th:if="${@sec.hasPermission('sysDict:add')}">
+        <a onclick="sysDictAddFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'glyphicon-plus icon-green'">添加</a>
+    </div>
+</div>
+
+<script type="text/javascript" th:inline="javascript">
+    var sysDictDataGrid;
+    $(function() {
+            sysDictDataGrid = $('#sysDictDataGrid').datagrid({
+            url : basePath + '/sysDict/dataGrid',
+            striped : true,
+            rownumbers : true,
+            pagination : true,
+            singleSelect : true,
+            idField : 'id',
+            sortName : 'id',
+            sortOrder : 'asc',
+            pageSize : 20,
+            pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500],
+            frozenColumns : [ [ {
+                width : 60,
+                title : '编号',
+                field : 'id',
+                sortable : true
+            } ] ],
+            columns : [ [ {
+                width : 120,
+                title : '类别',
+                field : 'dictType'
+            }, {
+                width : 120,
+                title : '键',
+                field : 'dictKey'
+            }, {
+                width : 120,
+                title : '值',
+                field : 'dictValue'
+            }, {
+                width : 120,
+                title : '描述',
+                field : 'dictDesc'
+            }, {
+                width : 120,
+                title : '排序',
+                field : 'seq'
+            }, {
+                width : 140,
+                title : '创建时间',
+                field : 'createTime',
+                sortable : true
+            }, {
+                field : 'action',
+                title : '操作',
+                width : 120,
+                formatter : function(value, row, index) {
+                    var str = '';
+                    /*[# th:if="${@sec.hasPermission('sysDict:edit')}"]*/
+                    str += $.formatString('<a href="javascript:void(0)" class="sysDict-easyui-linkbutton-edit" data-options="plain:true,iconCls:\'glyphicon-pencil icon-blue\'" onclick="sysDictEditFun(\'{0}\');" >编辑</a>', row.id);
+                    /*[/]*/
+                    return str;
+                }
+            } ] ],
+            onLoadSuccess:function(data){
+                $('.sysDict-easyui-linkbutton-edit').linkbutton({text:'编辑'});
+            },
+            toolbar : '#sysDictToolbar'
+        });
+    });
+
+    /**
+     * 添加框
+     * @param url
+     */
+    function sysDictAddFun() {
+        parent.$.modalDialog({
+            title : '添加',
+            width : 400,
+            height : 300,
+            href : basePath + '/sysDict/addPage',
+            buttons : [ {
+                text : '确定',
+                handler : function() {
+                    parent.$.modalDialog.openner_dataGrid = sysDictDataGrid;//因为添加成功之后，需要刷新这个treeGrid，所以先预定义好
+                    var f = parent.$.modalDialog.handler.find('#sysDictAddForm');
+                    f.submit();
+                }
+            } ]
+        });
+    }
+
+    /**
+     * 编辑
+     */
+    function sysDictEditFun(id) {
+        if (id === undefined) {
+            var rows = sysDictDataGrid.datagrid('getSelections');
+            id = rows[0].id;
+        } else {
+            sysDictDataGrid.datagrid('unselectAll').datagrid('uncheckAll');
+        }
+        parent.$.modalDialog({
+            title : '编辑',
+            width : 400,
+            height : 300,
+            href : basePath + '/sysDict/editPage?id=' + id,
+            buttons : [ {
+                text : '确定',
+                handler : function() {
+                    //因为添加成功之后，需要刷新这个dataGrid，所以先预定义好
+                    parent.$.modalDialog.openner_dataGrid = sysDictDataGrid;
+                    var f = parent.$.modalDialog.handler.find('#sysDictEditForm');
+                    f.submit();
+                }
+            } ]
+        });
+    }
+
+    /**
+     * 清除
+     */
+    function sysDictCleanFun() {
+        $('#sysDictSearchForm input').val('');
+        sysDictDataGrid.datagrid('load', {});
+    }
+
+    /**
+     * 搜索
+     */
+    function sysDictSearchFun() {
+        sysDictDataGrid.datagrid('load', $.serializeObject($('#sysDictSearchForm')));
+    }
+</script>

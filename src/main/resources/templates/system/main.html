@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      layout:decorate="~{common/layout}">
+
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/css/main.css}">
+    <script type="text/javascript" th:src="@{/static/js/main.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/sysDict.js}"></script>
+<head>
+
+<body layout:fragment="body">
+<div id="loading" style="position: fixed;top: -50%;left: -50%;width: 200%;height: 200%;background: #fff;z-index: 100;overflow: hidden;">
+    <img th:src="@{/static/images/ajax-loader.gif}" style="position: absolute;top: 0;left: 0;right: 0;bottom: 0;margin: auto;"/>
+</div>
+<div id="mainLayout" class="easyui-layout" data-options="fit:true, border:false">
+    <div data-options="region:'north',border:false, collapsedSize:0" style="height:50px;">
+        <div class="head"><table><tr>
+            <td th:utext="#{app.name}" width="50%" style="font-size: 14px;">如梦技术</td>
+            <td width="50%" align="right" style="font-size: 12px;">
+                <div class="easyui-panel rtool" data-options="border:false" style="text-align: right; background: #09C; color: white; margin-top: -1px;">
+                    <a href="#" class="easyui-menubutton" data-options="menu:'#mm1'">
+                        <span sec:authentication="name"></span>
+                    </a>
+                    <a href="#" class="easyui-menubutton" data-options="menu:'#mm2'">语言</a>
+                </div>
+                <div id="mm1" style="width:150px;">
+                    <th:block th:if="${@sec.hasPermission('admin:edit:pwd')}">
+                        <div data-options="iconCls:'glyphicon-pencil'" onclick='editUserPwd()'>修改密码</div>
+                        <div class="menu-sep"></div>
+                    </th:block>
+                    <div data-options="iconCls:'glyphicon-log-out'" onclick="logout()">退出</div>
+                </div>
+                <div id="mm2" style="width:150px;">
+                    <div data-options="iconCls:'glyphicon-globe'" onclick="goto('/main?locale=en_US')">英文</div>
+                    <div class="menu-sep"></div>
+                    <div data-options="iconCls:'glyphicon-heart'" onclick="goto('/main?locale=zh_CN')">中文</div>
+                </div>
+            </td>
+        </tr></table></div>
+    </div>
+    <div id="west" class="scrollbar" data-options="region:'west',split:true, border:false, collapsedSize:0" style="width:200px;background-color: #424f63;color:white">
+        <div class="zsy_menu">
+            <div class="menu_head">菜单导航</div>
+            <ul id="layout_west_tree" class="easyui-tree"></ul>
+        </div>
+    </div>
+    <div data-options="region:'center', border:false">
+        <div id="mainTabs" style="height:250px">
+            <div title="首页" data-options="iconCls:'glyphicon-home',border:false">
+                <iframe th:src="@{/static/version.html}" class="easyui-panel" data-options="fit:true,border:false" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="tabsMenu">
+    <div data-options="iconCls:'glyphicon-refresh'" type="refresh" style="font-size: 12px;">刷新</div>
+    <div class="menu-sep"></div>
+    <div data-options="iconCls:'glyphicon-remove'" type="close" style="font-size: 12px;">关闭</div>
+    <div data-options="iconCls:''" type="closeOther">关闭其他</div>
+    <div data-options="iconCls:''" type="closeAll">关闭所有</div>
+</div>
+<div id="tabTools" style="border: 0px; border-bottom: 1px solid #D3D3D3;">
+    <a href="###" class="easyui-linkbutton" plain="true" iconCls="glyphicon-home" onclick="toHome()"></a>
+    <a href="###" class="easyui-linkbutton" plain="true" iconCls="glyphicon-refresh" onclick="refreshTab()"></a>
+    <a href="###" class="easyui-linkbutton" plain="true" iconCls="glyphicon-remove" onclick="closeTab()"></a>
+    <a id="fullScreen" href="###" class="easyui-linkbutton" plain="true" iconCls="glyphicon-fullscreen" onclick="fullScreen()"></a>
+</div>
+</body>

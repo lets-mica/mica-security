@@ -1,0 +1,62 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:x="http://www.w3.org/1999/html">
+<div class="easyui-layout" data-options="fit:true,border:false">
+    <div data-options="region:'center',border:false" title="" style="overflow: hidden;padding: 3px;">
+        <form id="roleEditForm" method="post">
+            <table class="grid">
+                <tr>
+                    <td>角色名称</td>
+                    <td>
+                        <input name="id" type="hidden" th:value="${role.id}">
+                        <input name="name" type="text" placeholder="请输入角色名称" class="easyui-validatebox" data-options="required:true" th:value="${role.name}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>排序</td>
+                    <td>
+                        <input name="seq" class="easyui-numberspinner" required="required" data-options="editable:false" th:value="${role.seq}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>状态</td>
+                    <td>
+                        <x:select id="roleEditStatus" name="status" type="dbStatus" class="easyui-combobox" data-options="width:160,height:29,editable:false,panelHeight:'auto'"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>图标</td>
+                    <td ><input name="iconCls" th:value="${role.iconCls}" onclick='top.window.openIconDialog(this)'/></td>
+                </tr>
+                <tr>
+                    <td>备注</td>
+                    <td colspan="3"><textarea name="description">[[${role.description}]]</textarea></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" th:inline="javascript">
+    $(function() {
+        $('#roleEditForm').form({
+            url : basePath + '/role/edit',
+            onSubmit : function() {
+                progressLoad();
+                var isValid = $(this).form('validate');
+                if (!isValid) {
+                    progressClose();
+                }
+                return isValid;
+            },
+            success : function(result) {
+                progressClose();
+                result = $.parseJSON(result);
+                if (result.code === 1) {
+                    parent.$.modalDialog.openner_dataGrid.datagrid('reload');//之所以能在这里调用到parent.$.modalDialog.openner_dataGrid这个对象，是因为user.jsp页面预定义好了
+                    parent.$.modalDialog.handler.dialog('close');
+                } else {
+                    parent.$.messager.alert('错误', result.msg, 'error');
+                }
+            }
+        });
+        $("#roleEditStatus").val("[[${role.status}]]");
+    });
+</script>

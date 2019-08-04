@@ -1,0 +1,53 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<div class="easyui-layout" data-options="fit:true,border:false">
+    <div data-options="region:'center',border:false" style="overflow: hidden;">
+        <form id="editUserPwdForm" method="post">
+            <table class="grid">
+                <tr>
+                    <th>登录名：</th>
+                    <td><span sec:authentication="name"></span></td>
+                </tr>
+                <tr>
+                    <th>原密码：</th>
+                    <td><input name="oldPwd" type="password" placeholder="请输入原密码" class="easyui-textbox easyui-validatebox" data-options="required:true"></td>
+                </tr>
+                <tr>
+                    <th>新密码：</th>
+                    <td><input name="pwd" type="password" placeholder="请输入新密码" class="easyui-textbox easyui-validatebox" data-options="required:true"></td>
+                </tr>
+                <tr>
+                    <th>重复密码：</th>
+                    <td><input name="rePwd" type="password" placeholder="请再次输入新密码" class="easyui-textbox easyui-validatebox" data-options="required:true,validType:'eqPwd[\'#editUserPwdForm input[name=pwd]\']'"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript" th:inline="javascript">
+    $(function() {
+        $('#editUserPwdForm').form({
+            url : basePath + '/admin/editUserPwd',
+            onSubmit : function() {
+                progressLoad();
+                var isValid = $(this).form('validate');
+                if (!isValid) {
+                    progressClose();
+                }
+                return isValid;
+            },
+            success : function(result) {
+                progressClose();
+                result = $.parseJSON(result);
+                if (result.code === 1) {
+                    parent.$.messager.alert('提示', result.msg, 'info');
+                    parent.$.modalDialog.handler.dialog('close');
+                } else {
+                    parent.$.messager.alert('错误', result.msg, 'error');
+                }
+            }
+        });
+    });
+</script>

@@ -1,0 +1,129 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+}
+
+body {
+    font-family: Arial, 'Hiragino Sans GB', '微软雅黑', '黑体-简', Helvetica, sans-serif;
+    font-size: 12px;
+    overflow: auto;
+    height: 100%;
+    color: #3d5266;
+    background: #fff;
+}
+
+body {
+    /* 加载背景图 */
+    background-image: url(images/login/login_bg.jpg);
+    /* 背景图垂直、水平均居中 */
+    background-position: center center;
+    /* 背景图不平铺 */
+    background-repeat: no-repeat;
+    /* 当内容高度大于图片高度时，背景图像的位置相对于viewport固定 */
+    background-attachment: fixed;
+    /* 让背景图基于容器大小伸缩 */
+    background-size: cover;
+}
+
+input, button, select, textarea {
+    outline: none;
+}
+
+a:link, a:visited {
+    text-decoration: none;
+    color: #39c;
+    outline: none;
+}
+
+.crm-register-bg {
+    width: 100%;
+    height: 100%;
+    padding-top: 8%;
+}
+
+.crm-register-form {
+    width: 560px;
+    margin: 0 auto;
+    padding: 40px;
+    text-align: center;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    background: url(images/login/op_bg.png) center center repeat;
+    -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, .15);
+    -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, .15);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, .15);
+    position: relative;
+    z-index: 9;
+    border-radius: 5px;
+    position: relative;
+}
+
+.crm-register-form .crm-login1-header {
+    padding-bottom: 40px;
+}
+
+.crm-register-form header h1 {
+    font-size: 30px;
+    font-weight: normal;
+    color: #3d5266;
+}
+
+.crm-register-input-warpper {
+    line-height: 50px;
+    width: 100%;
+    height: 50px;
+    border: 1px solid #cfdae6;
+    border-radius: 100px;
+    background: #fff;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.crm-register-remember-me {
+    margin-left: 20px;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.crm-register-input-warpper.actived {
+    border: 2px solid #00aaef;
+}
+
+.crm-register-input-warpper .crm-register-input {
+    font-size: 18px;
+    float: left;
+    width: 100%;
+    text-indent: 20px;
+    border: none;
+    border-radius: 100px;
+    padding-left: 10px;
+    height: 48px;
+    line-height:48px;
+    height: 100%;
+}
+
+.crm-register-footer .pg-btn-submit {
+    font-size: 20px;
+    line-height: 50px;
+    width: 100%;
+    height: 50px;
+    color: #fff;
+    border-radius: 100px;
+    background: #00aaef;
+    display: inline-block;
+}
+
+.crm-loginfooter-info {
+    font-size: 14px;
+    margin-top: 20px;
+    text-align: center;
+    color: #8fa1b2;
+}
+
+.datagrid-mask-msg {
+    height: 40px;
+}

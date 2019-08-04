@@ -1,0 +1,6 @@
+INSERT INTO `t_resource` VALUES
+(null,'$!{table.comment}管理', '#if(${package.ModuleName})${package.ModuleName}:#end${table.entityPath}:manager', '#if(${package.ModuleName})/${package.ModuleName}#end/${table.entityPath}/manager', NULL, '$!{table.comment}管理','glyphicon-th ',999,0,1,1,0, now(), now()),
+(null,'列表','#if(${package.ModuleName})${package.ModuleName}:#end${table.entityPath}:dataGrid','#if(${package.ModuleName})/${package.ModuleName}#end/${table.entityPath}/treeGrid','ajax','资源列表','glyphicon-th-list',999,0,1,1,1, now(), now()),
+(null,'添加','#if(${package.ModuleName})${package.ModuleName}:#end${table.entityPath}:add','#if(${package.ModuleName})/${package.ModuleName}#end/${table.entityPath}/add','ajax','资源添加','glyphicon-plus icon-green',999,0,1,1,1, now(), now()),
+(null,'编辑','#if(${package.ModuleName})${package.ModuleName}:#end${table.entityPath}:edit','#if(${package.ModuleName})/${package.ModuleName}#end/${table.entityPath}/edit','ajax','资源编辑','glyphicon-pencil icon-blue',999,0,1,1,1, now(), now()),
+(null,'删除','#if(${package.ModuleName})${package.ModuleName}:#end${table.entityPath}:delete','#if(${package.ModuleName})/${package.ModuleName}#end/${table.entityPath}/delete','ajax','资源删除','glyphicon-remove icon-red',999,0,1,1,1, now(), now());

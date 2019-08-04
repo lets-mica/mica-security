@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2019-2029, Dreamlu 卢春梦 (596392912@qq.com & www.dreamlu.net).
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.dreamlu.system.mapper.RoleMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.dreamlu.system.model.Role">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="seq" property="seq"/>
+        <result column="description" property="description"/>
+        <result column="icon_cls" property="iconCls"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <select id="selectResourceListByRoleIdList" resultType="Resource"
+            parameterType="java.lang.Long">
+        SELECT
+        DISTINCT s.id AS id,
+        s.name AS 'name',
+        s.url AS url,
+        s.description AS description,
+        s.icon_cls AS iconCls,
+        s.pid AS pid,
+        s.seq AS seq,
+        s.status AS 'status',
+        s.open_mode AS openMode,
+        s.opened as opened,
+        s.resource_type AS resourceType,
+        s.create_time AS createTime,
+        s.update_time AS updateTime
+        FROM
+        t_role_resource e
+        LEFT JOIN t_resource s ON e.resource_id = s.id
+        WHERE
+        e.role_id in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND s.resource_type = 0
+        AND s.status = 1
+        ORDER BY seq
+    </select>
+</mapper>

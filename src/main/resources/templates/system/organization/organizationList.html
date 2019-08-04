@@ -1,0 +1,159 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div class="easyui-layout" data-options="fit:true,border:false">
+    <div data-options="region:'center',border:false">
+        <table id="organizationDataGrid" data-options="fit:true,border:false"></table>
+    </div>
+</div>
+<div id="organizationToolbar" style="display: none;">
+    <div th:if="${@sec.hasPermission('organization:add')}">
+        <a onclick="organizationAddFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'glyphicon-plus icon-green'">添加</a>
+    </div>
+</div>
+
+<script type="text/javascript" th:inline="javascript">
+    var organizationDataGrid;
+    $(function() {
+            organizationDataGrid = $('#organizationDataGrid').datagrid({
+            url : basePath + '/organization/dataGrid',
+            striped : true,
+            rownumbers : true,
+            pagination : true,
+            singleSelect : true,
+            idField : 'id',
+            sortName : 'id',
+            sortOrder : 'asc',
+            pageSize : 20,
+            pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500],
+            frozenColumns : [ [ {
+                title : 'id',
+                field : 'id',
+                width : 40,
+                hidden : true
+            } ] ],
+            columns : [ [ {
+                field : 'code',
+                title : '编号',
+                width : 40
+            },{
+                field : 'name',
+                title : '部门名称',
+                width : 180
+            }, {
+                field : 'seq',
+                title : '排序',
+                width : 40
+            }, {
+                field : 'iconCls',
+                title : '图标',
+                width : 120
+            }, {
+                width : '130',
+                title : '创建时间',
+                field : 'createTime'
+            }, {
+                field : 'pid',
+                title : '上级资源ID',
+                width : 150,
+                hidden : true
+            }, {
+                field : 'address',
+                title : '地址',
+                width : 120
+            }, {
+                field : 'action',
+                title : '操作',
+                width : 200,
+                formatter : function(value, row, index) {
+                    var str = '';
+                    /*[# th:if="${@sec.hasPermission('organization:edit')}"]*/
+                    str += $.formatString('<a href="javascript:void(0)" class="organization-easyui-linkbutton-edit" data-options="plain:true,iconCls:\'glyphicon-pencil icon-blue\'" onclick="organizationEditFun(\'{0}\');" >编辑</a>', row.id);
+                    /*[/]*/
+                    /*[# th:if="${@sec.hasPermission('organization:delete')}"]*/
+                    str += '&nbsp;&nbsp;|&nbsp;&nbsp;';
+                    str += $.formatString('<a href="javascript:void(0)" class="organization-easyui-linkbutton-del" data-options="plain:true,iconCls:\'glyphicon-trash icon-red\'" onclick="organizationDeleteFun(\'{0}\');" >删除</a>', row.id);
+                    /*[/]*/
+                    return str;
+                }
+            } ] ],
+            onLoadSuccess:function(data){
+                $('.organization-easyui-linkbutton-edit').linkbutton({text:'编辑'});
+                $('.organization-easyui-linkbutton-del').linkbutton({text:'删除'});
+            },
+            toolbar : '#organizationToolbar'
+        });
+    });
+
+    /**
+     * 添加框
+     * @param url
+     */
+    function organizationAddFun() {
+        parent.$.modalDialog({
+            title : '添加',
+            width : 520,
+            height : 300,
+            href : basePath + '/organization/addPage',
+            buttons : [ {
+                text : '确定',
+                handler : function() {
+                    parent.$.modalDialog.openner_dataGrid = organizationDataGrid;//因为添加成功之后，需要刷新这个treeGrid，所以先预定义好
+                    var f = parent.$.modalDialog.handler.find('#organizationAddForm');
+                    f.submit();
+                }
+            } ]
+        });
+    }
+
+    /**
+     * 编辑
+     */
+    function organizationEditFun(id) {
+        if (id === undefined) {
+            var rows = organizationDataGrid.datagrid('getSelections');
+            id = rows[0].id;
+        } else {
+            organizationDataGrid.datagrid('unselectAll').datagrid('uncheckAll');
+        }
+        parent.$.modalDialog({
+            title : '编辑',
+            width : 520,
+            height : 300,
+            href : basePath + '/organization/editPage?id=' + id,
+            buttons : [ {
+                text : '确定',
+                handler : function() {
+                    parent.$.modalDialog.openner_dataGrid = organizationDataGrid;//因为添加成功之后，需要刷新这个dataGrid，所以先预定义好
+                    var f = parent.$.modalDialog.handler.find('#organizationEditForm');
+                    f.submit();
+                }
+            } ]
+        });
+    }
+
+    /**
+     * 删除
+     */
+    function organizationDeleteFun(id) {
+        if (id === undefined) {//点击右键菜单才会触发这个
+            var rows = organizationDataGrid.datagrid('getSelections');
+            id = rows[0].id;
+        } else {//点击操作里面的删除图标会触发这个
+            organizationDataGrid.datagrid('unselectAll').datagrid('uncheckAll');
+        }
+        parent.$.messager.confirm('询问', '您是否要删除当前组织？', function(b) {
+            if (b) {
+                progressLoad();
+                $.post(basePath + '/organization/delete', {
+                    id : id
+                }, function(result) {
+                    if (result.code === 1) {
+                        parent.$.messager.alert('提示', result.msg, 'info');
+                        organizationDataGrid.datagrid('reload');
+                    }
+                    progressClose();
+                }, 'JSON');
+            }
+        });
+    }
+</script>
