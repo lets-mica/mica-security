@@ -95,14 +95,14 @@ public class Resource implements Serializable {
 	/**
 	 * 创建时间
 	 */
-	@TableField("create_time")
+	@TableField(value = "create_time", fill = FieldFill.INSERT)
 	@DateTimeFormat(pattern = DateUtil.PATTERN_DATETIME)
 	@JsonFormat(pattern = DateUtil.PATTERN_DATETIME)
 	private LocalDateTime createTime;
 	/**
 	 * 更新时间
 	 */
-	@TableField("update_time")
+	@TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
 	@DateTimeFormat(pattern = DateUtil.PATTERN_DATETIME)
 	@JsonFormat(pattern = DateUtil.PATTERN_DATETIME)
 	private LocalDateTime updateTime;
