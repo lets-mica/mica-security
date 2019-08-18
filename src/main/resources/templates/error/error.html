@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${code}">错误页</title>
+    <script type="text/javascript" th:src="@{/static/js/jquery-easyui/jquery.min.js}"></script>
+    <style>
+        p {
+            margin: 0;
+            padding: 0;
+        }
+
+        #clock {
+            font-family: 'Share Tech Mono', monospace;
+            text-align: center;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+
+        #clock .time {
+            letter-spacing: 0.05em;
+            font-size: 60px;
+            padding: 5px 0;
+        }
+
+        #clock .date {
+            letter-spacing: 0.1em;
+            font-size: 15px;
+        }
+
+        #clock .text {
+            letter-spacing: 0.1em;
+            font-size: 12px;
+            padding: 20px 0 0;
+        }
+    </style>
+</head>
+<body>
+<div id="clock">
+    <p class="date">...[[${code}]] 错误页...</p>
+    <p class="time">16:53:58</p>
+    <p class="text">2019-08-18 星期日</p>
+</div>
+<script>
+    $(function () {
+        var week = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        function updateTime() {
+            var cd = new Date();
+            $("#clock .time").html(zeroPadding(cd.getHours(), 2) + ':' + zeroPadding(cd.getMinutes(), 2) + ':' + zeroPadding(cd.getSeconds(), 2));
+            $("#clock .text").html(zeroPadding(cd.getFullYear(), 4) + '-' + zeroPadding(cd.getMonth() + 1, 2) + '-' + zeroPadding(cd.getDate(), 2) + ' ' + week[cd.getDay()]);
+        }
+
+        function zeroPadding(num, digit) {
+            var zero = '';
+            for (var i = 0; i < digit; i++) {
+                zero += '0';
+            }
+            return (zero + num).slice(-digit);
+        }
+    });
+</script>
+</body>
+</html>

@@ -16,12 +16,10 @@
 
 package net.dreamlu.config;
 
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.dreamlu.mica.core.utils.StringUtil;
 import net.dreamlu.mica.servlet.error.MicaErrorController;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
-import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -30,7 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -54,10 +52,10 @@ public class ViewErrorController extends MicaErrorController {
 			return super.errorHtml(request, response);
 		}
 		HttpStatus status = this.getStatus(request);
-		Map<String, Object> model = Collections.unmodifiableMap(this.getErrorAttributes(request, this.isIncludeStackTrace(request, MediaType.TEXT_HTML)));
-		response.setStatus(status.value());
+		Map<String, Object> model = new HashMap<>(this.getErrorAttributes(request, this.isIncludeStackTrace(request, MediaType.TEXT_HTML)));
+		model.put("code", status.value());
 		ModelAndView modelAndView = this.resolveErrorView(request, response, status, model);
-		String errorPath = getErrorPath() + StringPool.SLASH + status.value();
+		String errorPath = getErrorPath() + "/error";
 		return modelAndView != null ? modelAndView : new ModelAndView(errorPath, model);
 	}
 }
