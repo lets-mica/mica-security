@@ -46,7 +46,7 @@ mybatis-plus:
       id-type: auto
       select-strategy: not_empty
       insert-strategy: not_empty
-      update-strategy: not_empty
+      update-strategy: not_null
       table-underline: true
       logic-delete-value: 0
       logic-not-delete-value: 1

@@ -13,7 +13,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.7.RELEASE</version>
+        <version>2.1.9.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -21,8 +21,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <mybatis-plus.version>3.1.2</mybatis-plus.version>
-        <mica.version>1.1.8</mica.version>
+        <mybatis-plus.version>3.2.0</mybatis-plus.version>
+        <mica.version>1.2.0</mica.version>
     </properties>
 
     <dependencies>
@@ -69,9 +69,8 @@
             <artifactId>thymeleaf-extras-springsecurity5</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>${mybatis-plus.version}</version>
+            <groupId>net.dreamlu</groupId>
+            <artifactId>mica-plus-mybatis</artifactId>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
