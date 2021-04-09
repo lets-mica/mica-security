@@ -12,7 +12,8 @@
     <link rel="stylesheet" type="text/css" th:href="@{/static/css/icon.css}">
     <script type="text/javascript" th:src="@{/static/js/My97DatePicker/WdatePicker.js}"></script>
     <script type="text/javascript">
-        var basePath = '[[${#httpServletRequest.getContextPath()}]]';
+        // var basePath = '[[${#httpServletRequest.getContextPath()}]]';
+        var basePath = window.location.origin;
         window.UEDITOR_HOME_URL = basePath + "/static/js/ueditor/";
         window.UEDITOR_SERVER_URL = basePath + "/ueditor";
     </script>
