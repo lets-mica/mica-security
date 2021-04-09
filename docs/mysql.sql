@@ -27,7 +27,7 @@ CREATE TABLE `persistent_logins` (
   `token` varchar(64) NOT NULL,
   `last_used` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`series`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='记住密码';
 
 -- ----------------------------
 -- Records of persistent_logins
@@ -57,7 +57,7 @@ CREATE TABLE `t_admin` (
   `update_time` datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `IDX_admin_username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of t_admin
@@ -77,7 +77,7 @@ CREATE TABLE `t_admin_role` (
   `role_id` int(11) NOT NULL COMMENT '角色id',
   PRIMARY KEY (`id`),
   KEY `idx_user_role_ids` (`admin_id`,`role_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8 COMMENT='用户角色';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户角色';
 
 -- ----------------------------
 -- Records of t_admin_role
@@ -109,7 +109,7 @@ CREATE TABLE `t_organization` (
   `create_time` datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='组织机构';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='组织机构';
 
 -- ----------------------------
 -- Records of t_organization
@@ -141,7 +141,7 @@ CREATE TABLE `t_resource` (
   `create_time` datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=239 DEFAULT CHARSET=utf8 COMMENT='资源';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='资源';
 
 -- ----------------------------
 -- Records of t_resource
@@ -193,7 +193,7 @@ CREATE TABLE `t_role` (
   `create_time` datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='角色';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色';
 
 -- ----------------------------
 -- Records of t_role
@@ -215,7 +215,7 @@ CREATE TABLE `t_role_resource` (
   `resource_id` int(11) NOT NULL COMMENT '资源id',
   PRIMARY KEY (`id`),
   KEY `idx_role_resource_ids` (`role_id`,`resource_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=683 DEFAULT CHARSET=utf8 COMMENT='角色资源';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色资源';
 
 -- ----------------------------
 -- Records of t_role_resource
@@ -339,7 +339,7 @@ CREATE TABLE `t_sys_dict` (
   `seq` tinyint(2) NOT NULL DEFAULT '0' COMMENT '排序',
   `create_time` datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='字典';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='字典';
 
 -- ----------------------------
 -- Records of t_sys_dict
@@ -375,7 +375,7 @@ CREATE TABLE `t_sys_log` (
   `client_ip` varchar(255) NOT NULL DEFAULT '' COMMENT '客户端ip',
   `create_time` datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='系统日志';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统日志';
 
 -- ----------------------------
 -- Records of t_sys_log
