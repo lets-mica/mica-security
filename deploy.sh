@@ -11,4 +11,4 @@ scp ./target/dream-security.jar tx1:/home/java/
 scp ./script/start.sh tx1:/home/java/
 
 #远程执行命令
-ssh txyun "chmod u+x /home/java/start.sh; /home/java/start.sh"
+ssh tx1 "chmod u+x /home/java/start.sh; /home/java/start.sh"

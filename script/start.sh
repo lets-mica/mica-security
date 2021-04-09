@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd /root/jar/
+cd /home/java/
 
 #杀死老进程
 kill -9 `ps aux|grep dream-security |grep -v grep |grep java |awk '{print $2}'`
