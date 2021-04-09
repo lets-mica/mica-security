@@ -7,8 +7,8 @@ mvn clean -U package -DskipTests > /dev/null
 mv ./target/dream-security-*.jar ./target/dream-security.jar
 
 #上传代码
-scp ./target/dream-security.jar txyun:/root/jar/
-scp ./script/start.sh txyun:/root/jar/
+scp ./target/dream-security.jar tx1:/home/java/
+scp ./script/start.sh tx1:/home/java/
 
 #远程执行命令
-ssh txyun "chmod u+x /root/jar/start.sh; /root/jar/start.sh"
+ssh txyun "chmod u+x /home/java/start.sh; /home/java/start.sh"
