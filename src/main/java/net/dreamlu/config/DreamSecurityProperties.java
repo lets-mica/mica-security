@@ -51,8 +51,8 @@ public class DreamSecurityProperties {
 		 */
 		private int retryLimit = 5;
 		/**
-		 * 登录重试锁定cache名，默认：retryLimitCache
+		 * 登录重试锁定cache名，默认：retryLimitCache#30m 锁定30分钟
 		 */
-		private String retryLimitCacheName = "retryLimitCache";
+		private String retryLimitCacheName = "retryLimitCache#30m";
 	}
 }

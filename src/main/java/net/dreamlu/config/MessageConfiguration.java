@@ -33,8 +33,8 @@ import java.util.List;
  *
  * @author L.cm
  */
-@Configuration
 @AllArgsConstructor
+@Configuration(proxyBeanMethods = false)
 public class MessageConfiguration implements WebMvcConfigurer {
 	private final ObjectMapper objectMapper;
 
@@ -53,8 +53,8 @@ public class MessageConfiguration implements WebMvcConfigurer {
 		MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter(objectMapper);
 		// 如果出现低版本ie json下载的
 		List<MediaType> supportedMediaTypes = new ArrayList<>(2);
-		supportedMediaTypes.add(MediaType.valueOf("text/plain;charset=UTF-8"));
-		supportedMediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
+		supportedMediaTypes.add(MediaType.TEXT_PLAIN);
+		supportedMediaTypes.add(MediaType.APPLICATION_JSON);
 		converter.setSupportedMediaTypes(supportedMediaTypes);
 		converters.add(converter);
 	}

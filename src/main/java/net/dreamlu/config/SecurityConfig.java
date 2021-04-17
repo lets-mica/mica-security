@@ -17,7 +17,7 @@
 package net.dreamlu.config;
 
 import lombok.RequiredArgsConstructor;
-import net.dreamlu.mica.captcha.servlet.MicaCaptchaServlet;
+import net.dreamlu.mica.captcha.service.ICaptchaService;
 import net.dreamlu.secrity.auth.DreamAccessDeniedHandler;
 import net.dreamlu.secrity.auth.DreamAuthHandler;
 import net.dreamlu.secrity.auth.DreamAuthenticationProvider;
@@ -49,15 +49,15 @@ import javax.sql.DataSource;
  *
  * @author L.cm
  */
-@Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
+@Configuration(proxyBeanMethods = false)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableConfigurationProperties(DreamSecurityProperties.class)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private final DreamUserDetailsService userDetailsService;
 	private final DreamAuthHandler authHandler;
-	private final MicaCaptchaServlet dreamCaptcha;
+	private final ICaptchaService captchaService;
 	private final DreamWebAuthDetailsSource authDetailsSource;
 	private final DreamSecurityProperties dreamProperties;
 	private final CacheManager cacheManager;
@@ -128,7 +128,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public DreamAuthenticationProvider authProvider() {
 		final DreamAuthenticationProvider authProvider = new DreamAuthenticationProvider();
 		authProvider.setUserDetailsService(userDetailsService);
-		authProvider.setDreamCaptcha(dreamCaptcha);
+		authProvider.setCaptchaService(captchaService);
 		authProvider.setDreamProperties(dreamProperties);
 		authProvider.setCacheManager(cacheManager);
 		authProvider.setPasswordEncoder(encoder());

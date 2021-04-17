@@ -17,9 +17,11 @@
 package net.dreamlu.system.web;
 
 import lombok.AllArgsConstructor;
+import net.dreamlu.common.DreamConstants;
 import net.dreamlu.common.base.BaseController;
-import net.dreamlu.mica.captcha.servlet.MicaCaptchaServlet;
-import net.dreamlu.mica.common.support.IController;
+import net.dreamlu.mica.captcha.service.ICaptchaService;
+import net.dreamlu.mica.core.utils.StringUtil;
+import net.dreamlu.mica.core.utils.WebUtil;
 import net.dreamlu.secrity.auth.AuthUser;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +38,7 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 @AllArgsConstructor
 public class CommonController extends BaseController {
-	private final MicaCaptchaServlet dreamCaptcha;
+	private final ICaptchaService captchaService;
 
 	@GetMapping({"/", "main"})
 	public String index() {
@@ -58,7 +60,9 @@ public class CommonController extends BaseController {
 
 	@GetMapping("captcha.jpg")
 	public ResponseEntity<Resource> captcha(HttpServletResponse response) {
-		return dreamCaptcha.generate(response);
+		String uuid = StringUtil.getUUID();
+		WebUtil.setCookie(response, DreamConstants.CAPTCHA_COOKIE_NAME, uuid, -1);
+		return captchaService.generateResponseEntity(uuid);
 	}
 
 	@GetMapping("icons.html")

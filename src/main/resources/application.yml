@@ -1,11 +1,9 @@
 spring:
+  application:
+    name: "@artifactId@"
   output:
     ansi:
       enabled: always
-  http:
-    encoding:
-      charset: UTF-8
-      force: true
   servlet:
     multipart:
       max-request-size: 10MB
@@ -14,11 +12,12 @@ spring:
       file-size-threshold: 0
   mvc:
     static-path-pattern: /static/**
-  resources:
-    add-mappings: true
-    cache:
-      cachecontrol:
-        max-age: 356d
+  web:
+    resources:
+      add-mappings: true
+      cache:
+        cachecontrol:
+          max-age: 356d
   messages:
     basename: messages/messages
     cache-duration: 1d
@@ -33,7 +32,6 @@ spring:
       config: classpath:config/ehcache.xml
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-
 ## mybatis
 mybatis-plus:
   configuration:

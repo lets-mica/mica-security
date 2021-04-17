@@ -32,7 +32,7 @@ import java.util.Locale;
  *
  * @author L.cm
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class LocaleConfiguration implements WebMvcConfigurer {
 
 	@Bean

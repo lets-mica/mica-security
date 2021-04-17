@@ -16,16 +16,10 @@
 
 package net.dreamlu;
 
-import com.alibaba.druid.filter.logging.Log4j2Filter;
-import com.alibaba.druid.filter.logging.LogFilter;
-import com.alibaba.druid.sql.SQLUtils;
-import net.dreamlu.mica.launcher.MicaApplication;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 
 /**
  * 启动入口
@@ -34,17 +28,14 @@ import org.springframework.core.annotation.Order;
  */
 @SpringBootApplication
 public class DreamApplication extends SpringBootServletInitializer {
-	private static final String APPLICATION_NAME = "mica-fast";
 
 	public static void main(String[] args) {
-		MicaApplication.run(APPLICATION_NAME, DreamApplication.class, args);
+		SpringApplication.run(DreamApplication.class, args);
 	}
 
 	@Override
-	protected SpringApplicationBuilder createSpringApplicationBuilder() {
-		// war 包启动方式，注意继承 SpringBootServletInitializer，实现 createSpringApplicationBuilder 方法
-		return MicaApplication.createSpringApplicationBuilder(APPLICATION_NAME, DreamApplication.class);
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+		return application.sources(DreamApplication.class);
 	}
-
 
 }

@@ -18,7 +18,7 @@ package net.dreamlu.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.dreamlu.mica.core.utils.StringUtil;
-import net.dreamlu.mica.servlet.error.MicaErrorController;
+import net.dreamlu.mica.lite.error.MicaErrorController;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.context.annotation.Configuration;
@@ -36,7 +36,7 @@ import java.util.Map;
  *
  * @author L.cm
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class ViewErrorController extends MicaErrorController {
 
 	public ViewErrorController(ObjectMapper objectMapper,
@@ -52,10 +52,11 @@ public class ViewErrorController extends MicaErrorController {
 			return super.errorHtml(request, response);
 		}
 		HttpStatus status = this.getStatus(request);
-		Map<String, Object> model = new HashMap<>(this.getErrorAttributes(request, this.isIncludeStackTrace(request, MediaType.TEXT_HTML)));
+		Map<String, Object> model = new HashMap<>(this.getErrorAttributes(request, this.getErrorAttributeOptions(request, MediaType.TEXT_HTML)));
 		model.put("code", status.value());
 		ModelAndView modelAndView = this.resolveErrorView(request, response, status, model);
-		String errorPath = getErrorPath() + "/error";
+		String errorPath = getErrorProperties().getPath() + "/error";
 		return modelAndView != null ? modelAndView : new ModelAndView(errorPath, model);
 	}
+
 }

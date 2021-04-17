@@ -29,6 +29,11 @@ public interface DreamConstants {
 	String SECURITY_ROLE_PREFIX = "ROLE_";
 
 	/**
+	 * 验证码 cookie
+	 */
+	String CAPTCHA_COOKIE_NAME = "captcha";
+
+	/**
 	 * 状态[0:失效,1:正常]
 	 */
 	int DB_STATUS_DEL = 0;
@@ -42,6 +47,6 @@ public interface DreamConstants {
 
 	/**
 	 * 菜单
- 	 */
+	 */
 	int RESOURCE_TYPE_MENU = 0;
 }

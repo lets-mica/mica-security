@@ -19,7 +19,6 @@ package net.dreamlu.system.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.AllArgsConstructor;
-import net.dreamlu.common.DreamConstants;
 import net.dreamlu.common.result.Tree;
 import net.dreamlu.mica.core.utils.StringUtil;
 import net.dreamlu.system.mapper.RoleMapper;

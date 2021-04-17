@@ -20,7 +20,8 @@ import lombok.RequiredArgsConstructor;
 import net.dreamlu.common.exception.LocalizedException;
 import net.dreamlu.mica.core.result.R;
 import net.dreamlu.mica.core.utils.BeanUtil;
-import net.dreamlu.mica.servlet.error.MicaErrorAttributes;
+import net.dreamlu.mica.lite.error.MicaErrorAttributes;
+import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -30,17 +31,17 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * html请求异常处理
+ * html 请求异常处理
  *
  * @author L.cm
  */
-@Configuration
 @RequiredArgsConstructor
+@Configuration(proxyBeanMethods = false)
 public class DreamErrorAttributes extends MicaErrorAttributes {
 	private final MessageSource messageSource;
 
 	@Override
-	public Map<String, Object> getErrorAttributes(WebRequest webRequest, boolean includeStackTrace) {
+	public Map<String, Object> getErrorAttributes(WebRequest webRequest, ErrorAttributeOptions options) {
 		Throwable error = getError(webRequest);
 		if (error instanceof LocalizedException) {
 			Locale locale = LocaleContextHolder.getLocale();
@@ -48,6 +49,7 @@ public class DreamErrorAttributes extends MicaErrorAttributes {
 			String message = messageSource.getMessage(e.getLocaleMessage(), e.getLocaleArgs(), locale);
 			return BeanUtil.toMap(R.fail(message));
 		}
-		return super.getErrorAttributes(webRequest, includeStackTrace);
+		return super.getErrorAttributes(webRequest, options);
 	}
+
 }

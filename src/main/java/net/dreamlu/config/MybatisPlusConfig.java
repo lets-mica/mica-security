@@ -31,7 +31,7 @@ import java.time.LocalDateTime;
  *
  * @author L.cm
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @MapperScan("net.dreamlu.**.mapper.**")
 public class MybatisPlusConfig {
 

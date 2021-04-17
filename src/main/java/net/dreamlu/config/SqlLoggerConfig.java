@@ -1,6 +1,6 @@
 package net.dreamlu.config;
 
-import com.alibaba.druid.filter.logging.Log4j2Filter;
+import com.alibaba.druid.filter.logging.Slf4jLogFilter;
 import com.alibaba.druid.sql.SQLUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,8 +14,8 @@ import org.springframework.context.annotation.Configuration;
 public class SqlLoggerConfig {
 
 	@Bean
-	public Log4j2Filter logFilter() {
-		Log4j2Filter logFilter = new Log4j2Filter();
+	public Slf4jLogFilter slf4jLogFilter() {
+		Slf4jLogFilter logFilter = new Slf4jLogFilter();
 		logFilter.setConnectionLogEnabled(false);
 		logFilter.setConnectionCloseAfterLogEnabled(false);
 		logFilter.setStatementCreateAfterLogEnabled(false);

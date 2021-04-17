@@ -18,10 +18,12 @@ package net.dreamlu.secrity.auth;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.dreamlu.common.DreamConstants;
 import net.dreamlu.common.exception.LocalizedException;
 import net.dreamlu.config.DreamSecurityProperties;
-import net.dreamlu.mica.captcha.servlet.MicaCaptchaServlet;
+import net.dreamlu.mica.captcha.service.ICaptchaService;
 import net.dreamlu.mica.core.utils.StringUtil;
+import net.dreamlu.mica.core.utils.WebUtil;
 import net.dreamlu.secrity.service.DreamUserDetailsService;
 import net.dreamlu.secrity.service.UserLockService;
 import org.springframework.cache.Cache;
@@ -33,10 +35,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.util.Assert;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -45,27 +44,32 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author L.cm
  */
 public class DreamAuthenticationProvider extends DaoAuthenticationProvider {
-	@Getter @Setter
+	@Getter
+	@Setter
 	private DreamSecurityProperties dreamProperties;
-	@Getter @Setter
-	private MicaCaptchaServlet dreamCaptcha;
-	@Getter @Setter
+	@Getter
+	@Setter
+	private ICaptchaService captchaService;
+	@Getter
+	@Setter
 	private CacheManager cacheManager;
-	private Cache passwordRetryCache;
 
 	@Override
 	public Authentication authenticate(Authentication auth) throws AuthenticationException {
 		if (auth.isAuthenticated()) {
 			return auth;
 		}
+		// 校验验证码
+		String uuid = WebUtil.getCookieVal(DreamConstants.CAPTCHA_COOKIE_NAME);
+		if (StringUtil.isBlank(uuid)) {
+			throw new LocalizedException("verification.code.uuid.blank", "The verification code uuid is blank.");
+		}
 		DreamWebAuthenticationDetails details = (DreamWebAuthenticationDetails) auth.getDetails();
 		String verificationCode = details.getVerificationCode();
 		if (StringUtil.isBlank(verificationCode)) {
 			throw new LocalizedException("verification.code.blank", "The verification code is blank.");
 		}
-		ServletRequestAttributes attributes = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes());
-		HttpServletResponse response = attributes.getResponse();
-		if (dreamCaptcha.validate(response, verificationCode)) {
+		if (captchaService.validate(uuid, verificationCode)) {
 			return super.authenticate(auth);
 		} else {
 			throw new LocalizedException("verification.code.incorrect", "The verification code is incorrect.");
@@ -76,14 +80,15 @@ public class DreamAuthenticationProvider extends DaoAuthenticationProvider {
 	protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
 		// 添加用户锁定的功能，用户尝试登录密码错误太多次锁定账号
 		String username = userDetails.getUsername();
+		Cache passwordRetryCache = getCache();
 		//retry count + 1
 		AtomicInteger retryCount = passwordRetryCache.get(username, AtomicInteger.class);
-		if(retryCount == null) {
+		if (retryCount == null) {
 			retryCount = new AtomicInteger(0);
 			passwordRetryCache.put(username, retryCount);
 		}
 		int retryLimit = dreamProperties.getLogin().getRetryLimit();
-		if(retryCount.incrementAndGet() > retryLimit) {
+		if (retryCount.incrementAndGet() > retryLimit) {
 			//if retry count > retryLimit
 			logger.warn("username: " + username + " tried to login more than " + retryLimit + " times in period");
 			UserLockService userLockService = this.getUserLockService();
@@ -103,15 +108,25 @@ public class DreamAuthenticationProvider extends DaoAuthenticationProvider {
 		return authentication.equals(UsernamePasswordAuthenticationToken.class);
 	}
 
+	/**
+	 * 发现 caffeine 中会刷新会导致引用为 null
+	 *
+	 * @return Cache
+	 */
+	private Cache getCache() {
+		String retryLimitCacheName = dreamProperties.getLogin().getRetryLimitCacheName();
+		return cacheManager.getCache(retryLimitCacheName);
+	}
+
 	@Override
-	protected void doAfterPropertiesSet() throws Exception {
+	protected void doAfterPropertiesSet() {
 		super.doAfterPropertiesSet();
 		Assert.notNull(dreamProperties, "dreamProperties is null");
-		Assert.notNull(dreamCaptcha, "dreamCaptcha is null");
+		Assert.notNull(captchaService, "dreamCaptcha is null");
 		Assert.notNull(cacheManager, "cacheManager is null");
 		String retryLimitCacheName = dreamProperties.getLogin().getRetryLimitCacheName();
-		this.passwordRetryCache = cacheManager.getCache(retryLimitCacheName);
-		Assert.notNull(this.passwordRetryCache, "retryLimitCache retryLimitCacheName: " + retryLimitCacheName + " is not config.");
+		Cache cache = cacheManager.getCache(retryLimitCacheName);
+		Assert.notNull(cache, "retryLimitCache retryLimitCacheName: " + retryLimitCacheName + " is not config.");
 	}
 
 	private DreamUserDetailsService getUserLockService() {

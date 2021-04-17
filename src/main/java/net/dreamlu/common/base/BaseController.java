@@ -16,9 +16,9 @@
 
 package net.dreamlu.common.base;
 
-import net.dreamlu.mica.common.support.IController;
 import net.dreamlu.mica.core.result.R;
 import net.dreamlu.mica.core.result.SystemCode;
+import net.dreamlu.mica.lite.base.IController;
 
 /**
  * 抽象控制器

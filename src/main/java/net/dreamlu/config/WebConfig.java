@@ -17,7 +17,6 @@
 package net.dreamlu.config;
 
 import net.dreamlu.secrity.auth.UserArgumentResolver;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
@@ -30,13 +29,11 @@ import java.util.List;
  *
  * @author L.cm
  */
-@Configuration
-@EnableCaching
+@Configuration(proxyBeanMethods = false)
 public class WebConfig implements WebMvcConfigurer {
 
 	@Override
 	public void configurePathMatch(PathMatchConfigurer configurer) {
-		configurer.setUseSuffixPatternMatch(false);
 		configurer.setUseTrailingSlashMatch(true);
 	}
 
