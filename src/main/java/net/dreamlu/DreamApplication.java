@@ -16,10 +16,16 @@
 
 package net.dreamlu;
 
+import com.alibaba.druid.filter.logging.Log4j2Filter;
+import com.alibaba.druid.filter.logging.LogFilter;
+import com.alibaba.druid.sql.SQLUtils;
 import net.dreamlu.mica.launcher.MicaApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 
 /**
  * 启动入口
@@ -39,4 +45,6 @@ public class DreamApplication extends SpringBootServletInitializer {
 		// war 包启动方式，注意继承 SpringBootServletInitializer，实现 createSpringApplicationBuilder 方法
 		return MicaApplication.createSpringApplicationBuilder(APPLICATION_NAME, DreamApplication.class);
 	}
+
+
 }

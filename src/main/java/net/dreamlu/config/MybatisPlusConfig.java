@@ -43,7 +43,7 @@ public class MybatisPlusConfig {
 	public static class MybatisPlusMetaObjectHandler implements MetaObjectHandler {
 		@Override
 		public void insertFill(MetaObject metaObject) {
-			log.info("mybatis plus start insert fill ....");
+			log.debug("mybatis plus start insert fill ....");
 			LocalDateTime now = LocalDateTime.now();
 			String userName = SecurityUtils.getUserName();
 			this.fillValIfNullByName("createTime", now, metaObject);
@@ -56,7 +56,7 @@ public class MybatisPlusConfig {
 
 		@Override
 		public void updateFill(MetaObject metaObject) {
-			log.info("mybatis plus start update fill ....");
+			log.debug("mybatis plus start update fill ....");
 			this.fillValIfNullByName("updateTime", LocalDateTime.now(), metaObject);
 			this.fillValIfNullByName("updatedBy", SecurityUtils.getUserName(), metaObject);
 		}
