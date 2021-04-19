@@ -8,7 +8,7 @@
     <version>1.0.0</version>
     <packaging>jar</packaging>
     <name>dream-security</name>
-    <url>http://www.dreamlu.net</url>
+    <url>https://www.dreamlu.net</url>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

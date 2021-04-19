@@ -5,6 +5,10 @@
 - sql文件请查看`docs/mysql.sql`。
 - `application.yml`放置公共配置，`application-xxx.yml`放置`差异`性环境的配置。
 - 环境划分文档：https://www.dreamlu.net/docs/launcher-profile.html
+- 本地用户名：admin、test 密码：test
+- 设置启动环境为 `dev` 详见下图。
+
+![run.png](docs/img/run.png)
 
 ### 2. 最佳实践
 1. 先设计好数据库，注意表名，字段名填写清楚。
@@ -20,25 +24,15 @@
 
 ![资源页](docs/img/resource.png "资源页")
 
-### 4. TODO
-- 在线用户管理
-
-### 5. 技术咨询
-- QQ群(`新`)：479710041
-- QQ群(`满`)：523720304
-
-### 6. 默认账号
-- 本地用户名：admin、test 密码：test
-
-### 7. 在线 demo
+### 4. 在线 demo
 - 地址：http://demo.dreamlu.net
 
 - 账号vs密码：test、test
 
-### 8. 界面参考
+### 5. 界面参考
 - Zcurd快速开发平台：https://gitee.com/515097842/zcurd
 
-### 9. 推荐
+### 6. 推荐
 Spring boot 高效开发之 **Mica** 工具集：[https://gitee.com/596392912/mica](https://gitee.com/596392912/mica)
 
 ### License
