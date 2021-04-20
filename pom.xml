@@ -4,10 +4,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.dreamlu</groupId>
-    <artifactId>dream-security</artifactId>
+    <artifactId>mica-security</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
-    <name>dream-security</name>
+    <name>mica-security</name>
     <url>https://www.dreamlu.net</url>
 
     <parent>
