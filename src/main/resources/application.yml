@@ -27,9 +27,6 @@ spring:
     time-zone: Asia/Shanghai
   thymeleaf:
     mode: html
-  cache:
-    ehcache:
-      config: classpath:config/ehcache.xml
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
 ## mybatis
