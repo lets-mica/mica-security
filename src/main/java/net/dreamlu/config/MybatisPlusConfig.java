@@ -17,14 +17,21 @@
 package net.dreamlu.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import net.dreamlu.secrity.SecurityUtils;
 import org.apache.ibatis.reflection.MetaObject;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * MybatisPlus配置
@@ -36,10 +43,36 @@ import java.time.LocalDateTime;
 public class MybatisPlusConfig {
 
 	/**
+	 * mybatis-plus 乐观锁拦截器
+	 */
+	@Bean
+	public OptimisticLockerInnerInterceptor optimisticLockerInterceptor() {
+		return new OptimisticLockerInnerInterceptor();
+	}
+
+	/**
+	 * mybatis-plus分页插件
+	 */
+	@Bean
+	public PaginationInnerInterceptor paginationInterceptor() {
+		return new PaginationInnerInterceptor();
+	}
+
+	/**
+	 * mybatis plus 插件
+	 */
+	@Bean
+	public MybatisPlusInterceptor mybatisPlusInterceptor(ObjectProvider<List<InnerInterceptor>> listObjectProvider) {
+		final MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+		listObjectProvider.ifAvailable(interceptorList -> interceptorList.forEach(interceptor::addInnerInterceptor));
+		return interceptor;
+	}
+
+	/**
 	 * 全局参数填充
 	 */
 	@Slf4j
-	@Component
+	@Configuration(proxyBeanMethods = false)
 	public static class MybatisPlusMetaObjectHandler implements MetaObjectHandler {
 		@Override
 		public void insertFill(MetaObject metaObject) {
