@@ -1,6 +1,6 @@
 spring:
   application:
-    name: "@artifactId@"
+    name: "mica-security"
   output:
     ansi:
       enabled: always
