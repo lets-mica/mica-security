@@ -9,5 +9,5 @@ ${AnsiColor.BRIGHT_BLUE}|_| |_| |_|_|\___\__,_|${AnsiColor.BRIGHT_GREEN} |___/\_
 ${AnsiColor.BRIGHT_BLUE}                       ${AnsiColor.BRIGHT_GREEN}                                  __/ |
 ${AnsiColor.BRIGHT_BLUE}                       ${AnsiColor.BRIGHT_GREEN}                                 |___/
 
-                        www.dreamlu.net
+                      https://www.dreamlu.net
 ${AnsiColor.DEFAULT}
