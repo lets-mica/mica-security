@@ -16,6 +16,7 @@
 
 package net.dreamlu.common.result;
 
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Data;
@@ -40,11 +41,9 @@ public class PageVO {
 		if (StringUtil.isNotBlank(sort)) {
 			// 清理特殊字符，避免注入
 			String sortBy = StringUtils.camelToUnderline(StringUtil.cleanIdentifier(sort));
-			if ("asc".equalsIgnoreCase(order)) {
-				newPage.setAsc(sortBy);
-			} else {
-				newPage.setDesc(sortBy);
-			}
+			OrderItem orderItem = "asc".equalsIgnoreCase(order) ?
+				OrderItem.asc(sortBy) : OrderItem.desc(sortBy);
+			newPage.addOrder(orderItem);
 		}
 		return newPage;
 	}
