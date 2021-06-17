@@ -29,6 +29,9 @@ spring:
     mode: html
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
+mica:
+  captcha:
+    captcha-type: math # 使用数学计算验证码
 ## mybatis
 mybatis-plus:
   configuration:

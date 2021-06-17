@@ -5,6 +5,3 @@ spring:
     password: 12345678
   thymeleaf:
     cache: false
-logging:
-  level:
-    druid.sql.Statement: debug # 可执行 sql 日志打印
