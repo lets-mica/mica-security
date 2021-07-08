@@ -27,6 +27,7 @@
         <result column="class_method" property="classMethod"/>
         <result column="content" property="content"/>
         <result column="client_ip" property="clientIp"/>
+        <result column="address" property="address"/>
         <result column="create_time" property="createTime"/>
     </resultMap>
 

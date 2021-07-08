@@ -72,6 +72,11 @@ public class SysLog implements Serializable {
 	@TableField("client_ip")
 	private String clientIp;
 	/**
+	 * 登陆地址
+	 */
+	@TableField("address")
+	private String address;
+	/**
 	 * 创建时间
 	 */
 	@TableField(value = "create_time", fill = FieldFill.INSERT)

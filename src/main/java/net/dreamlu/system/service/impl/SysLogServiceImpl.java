@@ -20,10 +20,13 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import net.dreamlu.mica.core.utils.BeanUtil;
+import net.dreamlu.mica.core.utils.StringUtil;
+import net.dreamlu.mica.ip2region.core.Ip2regionSearcher;
 import net.dreamlu.system.mapper.SysLogMapper;
 import net.dreamlu.system.model.SysLog;
 import net.dreamlu.system.service.ISysLogService;
 import net.dreamlu.system.syslog.SysLogEvent;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -38,10 +41,17 @@ import java.time.LocalDateTime;
  */
 @Service
 public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> implements ISysLogService {
+	@Autowired
+	private Ip2regionSearcher regionSearcher;
 
 	@Override
 	public void saveSysLog(SysLogEvent sysLogEvent) {
 		SysLog sysLog = BeanUtil.copy(sysLogEvent, SysLog.class);
+		// 登陆者的 ip 转地址信息
+		String clientIp = sysLog.getClientIp();
+		if (StringUtil.isNotBlank(clientIp)) {
+			sysLog.setAddress(regionSearcher.getAddress(clientIp));
+		}
 		sysLog.setCreateTime(LocalDateTime.now());
 		super.save(sysLog);
 	}

@@ -372,16 +372,10 @@ CREATE TABLE `t_sys_log` (
   `operation` varchar(64) DEFAULT NULL COMMENT '操作',
   `class_method` varchar(100) NOT NULL COMMENT '类-方法',
   `content` varchar(2000) DEFAULT NULL COMMENT '内容',
-  `client_ip` varchar(255) NOT NULL DEFAULT '' COMMENT '客户端ip',
+  `client_ip` varchar(32) NOT NULL DEFAULT '' COMMENT '客户端ip',
+  `address` varchar(64) NOT NULL DEFAULT '' COMMENT '客户端地址',
   `create_time` datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统日志';
-
--- ----------------------------
--- Records of t_sys_log
--- ----------------------------
-BEGIN;
-INSERT INTO `t_sys_log` VALUES (1, 'admin', 'admin,de,pm,test', '登录成功', 'net.dreamlu.secrity.auth.DreamAuthHandler.onAuthenticationSuccess();', '/session?username＝admin＆password＝******＆code＝6s4u＆remember-me＝true', '0:0:0:0:0:0:0:1', '2019-08-02 09:22:59');
-COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;

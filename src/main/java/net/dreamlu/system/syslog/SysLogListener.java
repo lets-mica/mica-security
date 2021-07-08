@@ -16,7 +16,7 @@
 
 package net.dreamlu.system.syslog;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import net.dreamlu.system.service.ISysLogService;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
  * @author L.cm
  */
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SysLogListener {
 	private final ISysLogService sysLogService;
 

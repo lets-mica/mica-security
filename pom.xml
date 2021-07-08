@@ -43,6 +43,10 @@
             <groupId>net.dreamlu</groupId>
             <artifactId>mica-captcha</artifactId>
         </dependency>
+        <dependency>
+            <groupId>net.dreamlu</groupId>
+            <artifactId>mica-ip2region</artifactId>
+        </dependency>
         <!-- mica end -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
