@@ -16,7 +16,7 @@
 
 package net.dreamlu.system.web;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import net.dreamlu.common.annotation.SysLog;
 import net.dreamlu.common.base.BaseController;
 import net.dreamlu.common.result.Tree;
@@ -44,7 +44,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/organization")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class OrganizationController extends BaseController {
 	private final IOrganizationService organizationService;
 

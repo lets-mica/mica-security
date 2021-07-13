@@ -25,12 +25,13 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * <p>
  * 字典 服务实现类
- *
+ * <p>
  * bean名定为 dict 方便在thymeleaf中使用
  * </p>
  *
@@ -42,18 +43,20 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
 
 	/**
 	 * 查找出所有的字典
+	 *
 	 * @return SysDict集合
 	 */
 	@Cacheable(value = "oneDay", key = "'sys_dict_all'")
 	@Override
 	public List<SysDict> selectAll() {
 		LambdaQueryWrapper<SysDict> wrapper = new LambdaQueryWrapper<>();
-		wrapper.orderByAsc(SysDict::getDictType, SysDict::getSeq);
+		wrapper.orderByAsc(Arrays.asList(SysDict::getDictType, SysDict::getSeq));
 		return baseMapper.selectList(wrapper);
 	}
 
 	/**
 	 * 保存时删除字典的缓存
+	 *
 	 * @param entity 字典对象
 	 * @return {boolean}
 	 */
@@ -65,6 +68,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
 
 	/**
 	 * 更新时删除字典的缓存
+	 *
 	 * @param entity 字典对象
 	 * @return {boolean}
 	 */

@@ -17,11 +17,10 @@
 package net.dreamlu.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import net.dreamlu.mica.core.utils.BeanUtil;
 import net.dreamlu.system.mapper.AdminMapper;
 import net.dreamlu.system.mapper.AdminRoleMapper;
@@ -36,8 +35,7 @@ import net.dreamlu.system.vo.AdminVO;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -49,7 +47,7 @@ import java.util.stream.Collectors;
  * @since 2018-01-29
  */
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements IAdminService {
 	private final OrganizationMapper organizationMapper;
 	private final RoleMapper roleMapper;
@@ -57,9 +55,9 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
 
 	@Override
 	public Admin findByName(String username) {
-		Admin admin = new Admin();
-		admin.setUsername(username);
-		return getOne(new QueryWrapper<>(admin));
+		LambdaQueryWrapper<Admin> wrapper = new LambdaQueryWrapper<>();
+		wrapper.eq(Admin::getUsername, username);
+		return getOne(wrapper);
 	}
 
 	@Override
@@ -73,19 +71,34 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
 
 		IPage<Admin> page = baseMapper.selectPage(pages, wrapper);
 		Page<AdminVO> adminVOPage = new Page<>(page.getCurrent(), page.getPages(), page.getTotal());
+		List<Admin> adminList = page.getRecords();
+		// 如果查询数据为空
+		if (adminList == null || adminList.isEmpty()) {
+			return adminVOPage;
+		}
+		Set<Integer> adminIdSet = new HashSet<>();
+		Set<Integer> organizationIdSet = new HashSet<>();
+		for (Admin record : adminList) {
+			adminIdSet.add(record.getId());
+			organizationIdSet.add(record.getOrganizationId());
+		}
+		List<Organization> organizationList = organizationMapper.selectBatchIds(organizationIdSet);
+		Map<Integer, String> organizationMap = new HashMap<>();
+		for (Organization organization : organizationList) {
+			organizationMap.put(organization.getId(), organization.getName());
+		}
 		List<AdminVO> adminVOList = new ArrayList<>();
-		for (Admin _admin : page.getRecords()) {
-			AdminVO _adminVO = BeanUtil.copy(_admin, AdminVO.class);
-			// 处理组织名
-			Organization organization = organizationMapper.selectById(_admin.getOrganizationId());
-			_adminVO.setOrganizationName(organization.getName());
+		for (Admin record : adminList) {
+			AdminVO vo = new AdminVO();
+			BeanUtil.copy(record, vo);
+			vo.setOrganizationName(organizationMap.get(record.getOrganizationId()));
 			// 处理角色集合
-			List<String> roleNameList = roleMapper.findListByAdminId(_admin.getId())
+			List<String> roleNameList = roleMapper.findListByAdminId(record.getId())
 				.stream()
 				.map(Role::getName)
 				.collect(Collectors.toList());
-			_adminVO.setRolesList(roleNameList);
-			adminVOList.add(_adminVO);
+			vo.setRolesList(roleNameList);
+			adminVOList.add(vo);
 		}
 		adminVOPage.setRecords(adminVOList);
 		return adminVOPage;
@@ -93,10 +106,11 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
 
 	@Override
 	public boolean insertByVo(AdminVO adminVO) {
-		Admin admin = BeanUtil.copy(adminVO, Admin.class);
-		boolean r = super.save(admin);
-
-		Integer id = admin.getId();
+		Admin entity = new Admin();
+		BeanUtil.copy(adminVO, entity);
+		boolean r = super.save(entity);
+		// 更新管理员角色关系
+		Integer id = entity.getId();
 		String[] roles = adminVO.getRoleIds().split(",");
 		AdminRole adminRole = new AdminRole();
 		for (String string : roles) {
@@ -109,13 +123,13 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
 
 	@Override
 	public boolean updateByVo(AdminVO adminVO) {
-		Admin admin = BeanUtil.copy(adminVO, Admin.class);
-		boolean r = this.updateById(admin);
+		Admin entity = BeanUtil.copy(adminVO, Admin.class);
+		boolean r = this.updateById(entity);
 		Integer id = adminVO.getId();
 
-		AdminRole _adminRole = new AdminRole();
-		_adminRole.setAdminId(id);
-		List<AdminRole> adminRoles = adminRoleMapper.selectList(new QueryWrapper<>(_adminRole));
+		LambdaQueryWrapper<AdminRole> wrapper = new LambdaQueryWrapper<>();
+		wrapper.eq(AdminRole::getAdminId, id);
+		List<AdminRole> adminRoles = adminRoleMapper.selectList(wrapper);
 		if (adminRoles != null && !adminRoles.isEmpty()) {
 			for (AdminRole adminRole : adminRoles) {
 				adminRoleMapper.deleteById(adminRole.getId());

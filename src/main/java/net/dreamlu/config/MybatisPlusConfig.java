@@ -22,13 +22,13 @@ import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import lombok.extern.slf4j.Slf4j;
+import net.dreamlu.common.logger.SqlLogFilter;
 import net.dreamlu.secrity.SecurityUtils;
 import org.apache.ibatis.reflection.MetaObject;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,6 +41,11 @@ import java.util.List;
 @Configuration(proxyBeanMethods = false)
 @MapperScan("net.dreamlu.**.mapper.**")
 public class MybatisPlusConfig {
+
+	@Bean
+	public SqlLogFilter SqlLogFilter() {
+		return new SqlLogFilter();
+	}
 
 	/**
 	 * mybatis-plus 乐观锁拦截器

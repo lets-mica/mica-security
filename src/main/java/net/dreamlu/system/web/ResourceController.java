@@ -17,7 +17,7 @@
 package net.dreamlu.system.web;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import net.dreamlu.common.annotation.SysLog;
 import net.dreamlu.common.base.BaseController;
 import net.dreamlu.common.result.Tree;
@@ -46,7 +46,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/resource")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ResourceController extends BaseController {
 	private final IResourceService resourceService;
 

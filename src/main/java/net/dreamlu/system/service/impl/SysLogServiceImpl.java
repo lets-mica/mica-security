@@ -46,14 +46,14 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
 
 	@Override
 	public void saveSysLog(SysLogEvent sysLogEvent) {
-		SysLog sysLog = BeanUtil.copy(sysLogEvent, SysLog.class);
+		SysLog entity = BeanUtil.copy(sysLogEvent, SysLog.class);
 		// 登陆者的 ip 转地址信息
-		String clientIp = sysLog.getClientIp();
+		String clientIp = sysLogEvent.getClientIp();
 		if (StringUtil.isNotBlank(clientIp)) {
-			sysLog.setAddress(regionSearcher.getAddress(clientIp));
+			entity.setAddress(regionSearcher.getAddress(clientIp));
 		}
-		sysLog.setCreateTime(LocalDateTime.now());
-		super.save(sysLog);
+		entity.setCreateTime(LocalDateTime.now());
+		super.save(entity);
 	}
 
 	@Override

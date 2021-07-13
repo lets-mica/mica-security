@@ -17,7 +17,7 @@
 package net.dreamlu.system.web;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import net.dreamlu.common.annotation.SysLog;
 import net.dreamlu.common.base.BaseController;
 import net.dreamlu.common.result.EasyPage;
@@ -53,7 +53,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/admin")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AdminController extends BaseController {
 	private final IAdminService adminService;
 	private final PasswordEncoder passwordEncoder;
@@ -78,10 +78,10 @@ public class AdminController extends BaseController {
 		if (!matches) {
 			return R.fail("老密码不正确");
 		}
-		Admin _admin = new Admin();
-		_admin.setId(admin.getId());
-		_admin.setPassword(passwordEncoder.encode(pwd));
-		return status(adminService.updateById(_admin));
+		Admin entity = new Admin();
+		entity.setId(admin.getId());
+		entity.setPassword(passwordEncoder.encode(pwd));
+		return status(adminService.updateById(entity));
 	}
 
 	@GetMapping("/manager")
@@ -106,8 +106,8 @@ public class AdminController extends BaseController {
 	@ResponseBody
 	@SysLog("添加用户")
 	public R<Object> add(@Valid AdminVO adminVO) {
-		Admin _admin = adminService.findByName(adminVO.getUsername());
-		if (_admin != null) {
+		Admin admin = adminService.findByName(adminVO.getUsername());
+		if (admin != null) {
 			return R.fail("登录名已存在!");
 		}
 		String pwd = passwordEncoder.encode(adminVO.getPassword());
@@ -127,7 +127,7 @@ public class AdminController extends BaseController {
 	public String editPage(Model model, Integer id) {
 		Admin admin = adminService.getById(id);
 		List<Role> rolesList = roleService.findListByAdminId(id);
-		List<Integer> ids = new ArrayList<Integer>();
+		List<Integer> ids = new ArrayList<>();
 		for (Role role : rolesList) {
 			ids.add(role.getId());
 		}
@@ -141,8 +141,8 @@ public class AdminController extends BaseController {
 	@ResponseBody
 	@SysLog("编辑用户")
 	public R<Object> edit(@Valid AdminVO adminVO) {
-		Admin _admin = adminService.findByName(adminVO.getUsername());
-		if (_admin != null &&  adminVO.getId() != null && !adminVO.getId().equals(_admin.getId())) {
+		Admin admin = adminService.findByName(adminVO.getUsername());
+		if (admin != null && adminVO.getId() != null && !adminVO.getId().equals(admin.getId())) {
 			return R.fail("登录名已存在!");
 		}
 		// 更新密码

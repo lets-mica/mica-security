@@ -18,7 +18,7 @@ package net.dreamlu.system.web;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import net.dreamlu.common.base.BaseController;
 import net.dreamlu.common.result.EasyPage;
 import net.dreamlu.common.result.PageVO;
@@ -49,7 +49,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/sysDict")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SysDictController extends BaseController {
 	private final ISysDictService sysDictService;
 

@@ -18,7 +18,7 @@ package net.dreamlu.system.web;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import net.dreamlu.common.annotation.SysLog;
 import net.dreamlu.common.base.BaseController;
 import net.dreamlu.common.result.EasyPage;
@@ -48,7 +48,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/role")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RoleController extends BaseController {
 	private final IRoleService roleService;
 

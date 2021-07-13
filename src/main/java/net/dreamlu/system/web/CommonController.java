@@ -16,7 +16,7 @@
 
 package net.dreamlu.system.web;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import net.dreamlu.common.DreamConstants;
 import net.dreamlu.common.base.BaseController;
 import net.dreamlu.mica.captcha.service.ICaptchaService;
@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author L.cm
  */
 @Controller
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CommonController extends BaseController {
 	private final ICaptchaService captchaService;
 

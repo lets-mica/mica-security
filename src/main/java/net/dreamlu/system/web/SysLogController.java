@@ -17,7 +17,7 @@
 package net.dreamlu.system.web;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import net.dreamlu.common.result.EasyPage;
 import net.dreamlu.common.result.PageVO;
 import net.dreamlu.system.model.SysLog;
@@ -38,20 +38,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("/sysLog")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SysLogController {
-    private final ISysLogService sysLogService;
+	private final ISysLogService sysLogService;
 
-    @GetMapping("/manager")
-    public String manager() {
-        return "system/sysLog/sysLogList";
-    }
+	@GetMapping("/manager")
+	public String manager() {
+		return "system/sysLog/sysLogList";
+	}
 
-    @PostMapping("/dataGrid")
-    @ResponseBody
-    public EasyPage<SysLog> dataGrid(SysLog sysLog, PageVO pageVO) {
+	@PostMapping("/dataGrid")
+	@ResponseBody
+	public EasyPage<SysLog> dataGrid(SysLog sysLog, PageVO pageVO) {
 		Page<SysLog> pages = pageVO.toPage();
 		sysLogService.findPage(pages, sysLog);
-        return EasyPage.of(pages);
-    }
+		return EasyPage.of(pages);
+	}
 }
