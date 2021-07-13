@@ -177,6 +177,7 @@ INSERT INTO `t_resource` VALUES (235, '字典管理', 'sysDict:manager', '/sysDi
 INSERT INTO `t_resource` VALUES (236, '列表', 'sysDict:dataGrid', '/sysDict/dataGrid', 'ajax', '资源列表', 'glyphicon-th-list', 235, 0, 1, 1, 1, '2018-04-15 20:17:32', '2018-04-15 21:59:40');
 INSERT INTO `t_resource` VALUES (237, '添加', 'sysDict:add', '/sysDict/add', 'ajax', '资源添加', 'glyphicon-plus', 235, 0, 1, 1, 1, '2018-04-15 20:17:32', '2018-04-15 21:32:45');
 INSERT INTO `t_resource` VALUES (238, '编辑', 'sysDict:edit', '/sysDict/edit', 'ajax', '资源编辑', 'glyphicon-pencil', 235, 0, 1, 1, 1, '2018-04-15 20:17:32', '2018-04-15 21:32:55');
+INSERT INTO `t_resource` VALUES (239, 'swagger', '', '/doc.html', '', NULL, 'glyphicon-send ', 221, 0, 1, 1, 0, '2021-04-12 22:57:05', '2021-07-13 22:40:13');
 COMMIT;
 
 -- ----------------------------
@@ -260,6 +261,7 @@ INSERT INTO `t_role_resource` VALUES (675, 1, 235);
 INSERT INTO `t_role_resource` VALUES (676, 1, 236);
 INSERT INTO `t_role_resource` VALUES (677, 1, 237);
 INSERT INTO `t_role_resource` VALUES (678, 1, 238);
+INSERT INTO `t_role_resource` VALUES (679, 1, 239);
 INSERT INTO `t_role_resource` VALUES (437, 2, 1);
 INSERT INTO `t_role_resource` VALUES (438, 2, 13);
 INSERT INTO `t_role_resource` VALUES (439, 2, 131);
@@ -271,6 +273,7 @@ INSERT INTO `t_role_resource` VALUES (443, 2, 223);
 INSERT INTO `t_role_resource` VALUES (444, 2, 224);
 INSERT INTO `t_role_resource` VALUES (446, 2, 227);
 INSERT INTO `t_role_resource` VALUES (447, 2, 228);
+INSERT INTO `t_role_resource` VALUES (448, 2, 239);
 INSERT INTO `t_role_resource` VALUES (158, 3, 1);
 INSERT INTO `t_role_resource` VALUES (159, 3, 11);
 INSERT INTO `t_role_resource` VALUES (164, 3, 12);
@@ -324,6 +327,7 @@ INSERT INTO `t_role_resource` VALUES (556, 8, 231);
 INSERT INTO `t_role_resource` VALUES (557, 8, 232);
 INSERT INTO `t_role_resource` VALUES (558, 8, 233);
 INSERT INTO `t_role_resource` VALUES (559, 8, 234);
+INSERT INTO `t_role_resource` VALUES (560, 8, 239);
 COMMIT;
 
 -- ----------------------------
@@ -347,8 +351,8 @@ CREATE TABLE `t_sys_dict` (
 BEGIN;
 INSERT INTO `t_sys_dict` VALUES (1, 'adminSex', '性别-男', '0', '男', 0, '2018-04-21 12:45:34');
 INSERT INTO `t_sys_dict` VALUES (2, 'adminSex', '性别-女', '1', '女', 1, '2018-04-21 12:45:34');
-INSERT INTO `t_sys_dict` VALUES (3, 'dbStatus', '数据库状态-失效', '0', '失效', 0, '2018-04-21 12:46:37');
-INSERT INTO `t_sys_dict` VALUES (4, 'dbStatus', '数据库状态-正常', '1', '正常', 1, '2018-04-21 12:46:59');
+INSERT INTO `t_sys_dict` VALUES (3, 'dbStatus', '数据库状态-正常', '1', '正常', 0, '2018-04-21 12:46:59');
+INSERT INTO `t_sys_dict` VALUES (4, 'dbStatus', '数据库状态-失效', '0', '失效', 1, '2018-04-21 12:46:37');
 INSERT INTO `t_sys_dict` VALUES (5, 'adminLocked', '锁定-否', '0', '否', 0, '2018-04-21 12:50:56');
 INSERT INTO `t_sys_dict` VALUES (6, 'adminLocked', '锁定-是', '1', '是', 1, '2018-04-21 12:51:15');
 INSERT INTO `t_sys_dict` VALUES (7, 'adminType', 'admin类型-管理员', '0', '管理员', 1, '2018-04-21 12:52:27');

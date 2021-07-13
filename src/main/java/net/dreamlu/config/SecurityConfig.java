@@ -67,7 +67,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configure(WebSecurity web) {
 		// @formatter:off
 		web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**")
-			.antMatchers("/test/**")
 			.antMatchers("/favicon.ico")
 			.antMatchers("/error")
 			.antMatchers("/static/**")
@@ -75,6 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/webjars/**")
 			.antMatchers("/captcha.jpg")
 			.antMatchers("/excel/**")
+			.antMatchers("/doc.html")
 			.antMatchers("/swagger-resources/**")
 			.antMatchers("/upload/**");
 		// @formatter:on
@@ -113,7 +113,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.deleteCookies("JSESSIONID", "remember-me");
 
 		http.csrf()
-			.ignoringAntMatchers("/druid/**", "/ueditor")
 			.csrfTokenRepository(new CookieCsrfTokenRepository());
 		// @formatter:on
 	}

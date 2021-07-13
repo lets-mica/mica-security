@@ -16,6 +16,7 @@
 
 package net.dreamlu.system.web;
 
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import net.dreamlu.common.annotation.SysLog;
 import net.dreamlu.common.base.BaseController;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -45,9 +47,11 @@ import java.util.List;
 @Controller
 @RequestMapping("/organization")
 @RequiredArgsConstructor
+@Api(tags = "组织::管理")
 public class OrganizationController extends BaseController {
 	private final IOrganizationService organizationService;
 
+	@ApiIgnore
 	@GetMapping("/manager")
 	public String manager() {
 		return "system/organization/organizationList";
@@ -71,6 +75,7 @@ public class OrganizationController extends BaseController {
 	/**
 	 * 添加页面
 	 */
+	@ApiIgnore
 	@GetMapping("/addPage")
 	public String addPage() {
 		return "system/organization/organizationAdd";
@@ -100,6 +105,7 @@ public class OrganizationController extends BaseController {
 	/**
 	 * 编辑
 	 */
+	@ApiIgnore
 	@GetMapping("/editPage")
 	public String editPage(Model model, Long id) {
 		Organization organization = organizationService.getById(id);

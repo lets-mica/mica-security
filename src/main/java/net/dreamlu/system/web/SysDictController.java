@@ -18,6 +18,7 @@ package net.dreamlu.system.web;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import net.dreamlu.common.base.BaseController;
 import net.dreamlu.common.result.EasyPage;
@@ -34,6 +35,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
@@ -50,9 +52,11 @@ import java.util.List;
 @Controller
 @RequestMapping("/sysDict")
 @RequiredArgsConstructor
+@Api(tags = "字典::管理")
 public class SysDictController extends BaseController {
 	private final ISysDictService sysDictService;
 
+	@ApiIgnore
 	@GetMapping("/manager")
 	@PreAuthorize("@sec.hasPermission('sysDict:manager')")
 	public String manager() {
@@ -87,6 +91,7 @@ public class SysDictController extends BaseController {
 	/**
 	 * 添加页面-字典
 	 */
+	@ApiIgnore
 	@GetMapping("/addPage")
 	public String addPage() {
 		return "system/sysDict/sysDictAdd";
@@ -106,6 +111,7 @@ public class SysDictController extends BaseController {
 	/**
 	 * 编辑-字典
 	 */
+	@ApiIgnore
 	@GetMapping("/editPage")
 	public String editPage(Model model, Integer id) {
 		SysDict sysDict = sysDictService.getById(id);
