@@ -83,7 +83,7 @@ public class SelectElementTagProcessor extends AbstractElementTagProcessor {
 				StringBuilder option = new StringBuilder();
 				option.append("<option value=\"");
 				option.append(type);
-				option.append("\")>");
+				option.append("\">");
 				option.append(type);
 				option.append("</option>");
 				options.add(option.toString());
