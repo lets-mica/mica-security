@@ -17,6 +17,7 @@
 package net.dreamlu.system.web;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import net.dreamlu.common.result.EasyPage;
 import net.dreamlu.common.result.PageVO;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * <p>
@@ -39,9 +41,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/sysLog")
 @RequiredArgsConstructor
+@Api(tags = "日志::管理")
 public class SysLogController {
 	private final ISysLogService sysLogService;
 
+	@ApiIgnore
 	@GetMapping("/manager")
 	public String manager() {
 		return "system/sysLog/sysLogList";

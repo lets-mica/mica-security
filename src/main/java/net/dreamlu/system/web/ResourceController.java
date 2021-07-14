@@ -17,6 +17,7 @@
 package net.dreamlu.system.web;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import net.dreamlu.common.annotation.SysLog;
 import net.dreamlu.common.base.BaseController;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -47,9 +49,11 @@ import java.util.List;
 @Controller
 @RequestMapping("/resource")
 @RequiredArgsConstructor
+@Api(tags = "资源::管理")
 public class ResourceController extends BaseController {
 	private final IResourceService resourceService;
 
+	@ApiIgnore
 	@GetMapping("/manager")
 	public String manager() {
 		return "system/resource/resourceList";
@@ -98,6 +102,7 @@ public class ResourceController extends BaseController {
 	 * @param model 数据绑定
 	 * @param pid 选中的id
 	 */
+	@ApiIgnore
 	@GetMapping("/addPage")
 	public String addPage(Model model, Long pid) {
 		model.addAttribute("pid", pid);
@@ -128,6 +133,7 @@ public class ResourceController extends BaseController {
 	/**
 	 * 编辑页
 	 */
+	@ApiIgnore
 	@GetMapping("/editPage")
 	public String editPage(Model model, Long id) {
 		Resource resource = resourceService.getById(id);

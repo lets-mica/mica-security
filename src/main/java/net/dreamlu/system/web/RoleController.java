@@ -18,6 +18,7 @@ package net.dreamlu.system.web;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import net.dreamlu.common.annotation.SysLog;
 import net.dreamlu.common.base.BaseController;
@@ -34,6 +35,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -49,9 +51,11 @@ import java.util.List;
 @Controller
 @RequestMapping("/role")
 @RequiredArgsConstructor
+@Api(tags = "角色::管理")
 public class RoleController extends BaseController {
 	private final IRoleService roleService;
 
+	@ApiIgnore
 	@GetMapping("/manager")
 	public String manager() {
 		return "system/role/roleList";
@@ -78,6 +82,7 @@ public class RoleController extends BaseController {
 	/**
 	 * 添加页面
 	 */
+	@ApiIgnore
 	@GetMapping("/addPage")
 	public String addPage() {
 		return "system/role/roleAdd";
@@ -108,6 +113,7 @@ public class RoleController extends BaseController {
 	/**
 	 * 编辑
 	 */
+	@ApiIgnore
 	@GetMapping("/editPage")
 	public String editPage(Model model, Long id) {
 		Role role = roleService.getById(id);
@@ -129,6 +135,7 @@ public class RoleController extends BaseController {
 	/**
 	 * 授权页面
 	 */
+	@ApiIgnore
 	@GetMapping("/grantPage")
 	public String grantPage(Model model, Long id) {
 		model.addAttribute("id", id);

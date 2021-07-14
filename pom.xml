@@ -48,6 +48,10 @@
             <groupId>net.dreamlu</groupId>
             <artifactId>mica-ip2region</artifactId>
         </dependency>
+        <dependency>
+            <groupId>net.dreamlu</groupId>
+            <artifactId>mica-swagger</artifactId>
+        </dependency>
         <!-- mica end -->
         <dependency>
             <groupId>org.ssssssss</groupId>

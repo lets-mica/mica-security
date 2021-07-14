@@ -17,6 +17,7 @@
 package net.dreamlu.system.web;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import net.dreamlu.common.annotation.SysLog;
 import net.dreamlu.common.base.BaseController;
@@ -38,6 +39,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -54,11 +56,13 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin")
 @RequiredArgsConstructor
+@Api(tags = "管理员::管理")
 public class AdminController extends BaseController {
 	private final IAdminService adminService;
 	private final PasswordEncoder passwordEncoder;
 	private final IRoleService roleService;
 
+	@ApiIgnore
 	@GetMapping("/editPwdPage")
 	@PreAuthorize("@sec.hasPermission('admin:edit:pwd')")
 	public String editPwdPage() {
@@ -84,6 +88,7 @@ public class AdminController extends BaseController {
 		return status(adminService.updateById(entity));
 	}
 
+	@ApiIgnore
 	@GetMapping("/manager")
 	public String manager() {
 		return "system/admin/adminList";
@@ -96,6 +101,7 @@ public class AdminController extends BaseController {
 		return EasyPage.of(adminVOIPage);
 	}
 
+	@ApiIgnore
 	@GetMapping("/addPage")
 	public String addPage() {
 		return "system/admin/adminAdd";
@@ -123,6 +129,7 @@ public class AdminController extends BaseController {
 		return status(adminService.removeById(admin));
 	}
 
+	@ApiIgnore
 	@GetMapping("/editPage")
 	public String editPage(Model model, Integer id) {
 		Admin admin = adminService.getById(id);
