@@ -111,7 +111,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.csrf()
 			// csrf 放行 magic web 接口
-			.ignoringAntMatchers(magicAPIProperties.getWeb(), magicAPIProperties.getPrefix() + "/**")
+			.ignoringAntMatchers(magicAPIProperties.getWeb() + "/**", magicAPIProperties.getPrefix() + "/**")
 			.csrfTokenRepository(new CookieCsrfTokenRepository());
 		// @formatter:on
 	}
