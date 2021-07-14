@@ -47,6 +47,8 @@ public interface RoleMapper extends BaseMapper<Role> {
 
 	List<Resource> selectResourceListByRoleIdList(@Param("list") List<Integer> list);
 
+	List<Resource> selectAllResourceListByRoleIdList(@Param("list") List<Integer> list);
+
 	@Select("SELECT e.resource_id AS id FROM t_role r LEFT JOIN t_role_resource e ON r.id = e.role_id " +
 		"WHERE r.id = #{id} AND r.status = 1")
 	List<Integer> selectResourceIdListByRoleId(@Param("id") Integer id);

@@ -18,7 +18,7 @@ package net.dreamlu.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import net.dreamlu.common.DreamConstants;
 import net.dreamlu.common.result.Tree;
 import net.dreamlu.mica.core.utils.StringUtil;
@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * @since 2018-01-29
  */
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> implements IResourceService {
 	private final ResourceMapper resourceMapper;
 	private final RoleMapper roleMapper;
@@ -153,5 +153,17 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
 			return Collections.emptyList();
 		}
 		return roleMapper.selectResourceListByRoleIdList(roleIdList);
+	}
+
+	@Override
+	public List<Resource> findAllUrlByAdminId(Integer adminId) {
+		// 用户角色
+		List<Integer> roleIdList = roleMapper.findListByAdminId(adminId).stream()
+			.map(Role::getId)
+			.collect(Collectors.toList());
+		if (roleIdList.isEmpty()) {
+			return Collections.emptyList();
+		}
+		return roleMapper.selectAllResourceListByRoleIdList(roleIdList);
 	}
 }

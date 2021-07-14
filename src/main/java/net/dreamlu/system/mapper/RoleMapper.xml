@@ -58,4 +58,32 @@
         AND s.status = 1
         ORDER BY seq
     </select>
+
+    <select id="selectAllResourceListByRoleIdList" resultType="Resource"
+            parameterType="java.lang.Long">
+        SELECT
+        DISTINCT s.id AS id,
+        s.name AS 'name',
+        s.url AS url,
+        s.description AS description,
+        s.icon_cls AS iconCls,
+        s.pid AS pid,
+        s.seq AS seq,
+        s.status AS 'status',
+        s.open_mode AS openMode,
+        s.opened as opened,
+        s.resource_type AS resourceType,
+        s.create_time AS createTime,
+        s.update_time AS updateTime
+        FROM
+        t_role_resource e
+        LEFT JOIN t_resource s ON e.resource_id = s.id
+        WHERE
+        e.role_id in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND s.status = 1
+        ORDER BY seq
+    </select>
 </mapper>

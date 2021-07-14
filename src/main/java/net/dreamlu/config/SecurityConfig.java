@@ -41,6 +41,7 @@ import org.springframework.security.web.authentication.rememberme.JdbcTokenRepos
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.ssssssss.magicapi.spring.boot.starter.MagicAPIProperties;
 
 import javax.sql.DataSource;
 
@@ -60,6 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private final ICaptchaService captchaService;
 	private final DreamWebAuthDetailsSource authDetailsSource;
 	private final DreamSecurityProperties dreamProperties;
+	private final MagicAPIProperties magicAPIProperties;
 	private final CacheManager cacheManager;
 	private final DataSource dataSource;
 
@@ -67,15 +69,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configure(WebSecurity web) {
 		// @formatter:off
 		web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**")
-			.antMatchers("/test/**")
 			.antMatchers("/favicon.ico")
 			.antMatchers("/error")
 			.antMatchers("/static/**")
-			.antMatchers("/webjars*")
-			.antMatchers("/webjars/**")
 			.antMatchers("/captcha.jpg")
-			.antMatchers("/excel/**")
-			.antMatchers("/swagger-resources/**")
 			.antMatchers("/upload/**");
 		// @formatter:on
 	}
@@ -113,7 +110,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.deleteCookies("JSESSIONID", "remember-me");
 
 		http.csrf()
-			.ignoringAntMatchers("/druid/**", "/ueditor")
+			// csrf 放行 magic web 接口
+			.ignoringAntMatchers(magicAPIProperties.getWeb(), magicAPIProperties.getPrefix() + "/**")
 			.csrfTokenRepository(new CookieCsrfTokenRepository());
 		// @formatter:on
 	}

@@ -33,7 +33,7 @@ import java.util.List;
 
 /**
  * 权限判断
- *
+ * <p>
  * url: https://stackoverflow.com/questions/41434231/use-spring-security-in-thymeleaf-escaped-expressions-in-javascript
  *
  * @author l.cm
@@ -45,6 +45,7 @@ public class SecService {
 
 	/**
 	 * 提供给页面输出当前用户
+	 *
 	 * @return {AuthUser}
 	 */
 	public AuthUser currentUser() {
@@ -53,10 +54,21 @@ public class SecService {
 
 	/**
 	 * 已经授权的
+	 *
 	 * @return 是否授权
 	 */
 	public boolean isAuthenticated() {
 		return this.currentUser() != null;
+	}
+
+	/**
+	 * 判断请求是否有权限
+	 *
+	 * @param request HttpServletRequest
+	 * @return 是否有权限
+	 */
+	public boolean hasPermission(HttpServletRequest request) {
+		return hasPermission(request, SecurityUtils.getAuthentication());
 	}
 
 	/**
@@ -76,7 +88,7 @@ public class SecService {
 			return false;
 		}
 		Integer adminId = authUser.getUserId();
-		List<Resource> resourceList = resourceService.findAllByAdminId(adminId);
+		List<Resource> resourceList = resourceService.findAllUrlByAdminId(adminId);
 		return resourceList.stream()
 			.map(Resource::getUrl)
 			.filter(StringUtil::isNotBlank)
@@ -85,6 +97,7 @@ public class SecService {
 
 	/**
 	 * 判断按钮是否有xxx:xxx权限
+	 *
 	 * @param permission 权限
 	 * @return {boolean}
 	 */

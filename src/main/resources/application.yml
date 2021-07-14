@@ -32,6 +32,15 @@ spring:
 mica:
   captcha:
     captcha-type: math # 使用数学计算验证码
+magic-api:
+  show-url: false # 是否打印地址
+  web: /magic/web # 配置 web 页面入口
+  prefix: /api # 接口前缀，可以不配置，这里配置成 /api, 方便后期做安全规则
+  resource: # 配置存储方式，默认使用的是文件，笔者认为数据库还是方便一些
+    type: database # 配置存储在数据库中
+    tableName: magic_api_file # 数据库中的表名
+    prefix: /magic-api # key前缀
+    readonly: false # 是否是只读模式
 ## mybatis
 mybatis-plus:
   configuration:
@@ -42,7 +51,6 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: auto
-      select-strategy: not_empty
       insert-strategy: not_empty
       update-strategy: not_null
       table-underline: true

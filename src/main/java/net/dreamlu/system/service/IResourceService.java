@@ -44,4 +44,6 @@ public interface IResourceService extends IService<Resource> {
 	List<Tree> findUserTree(AuthUser authUser);
 
 	List<Resource> findAllByAdminId(Integer adminId);
+
+	List<Resource> findAllUrlByAdminId(Integer adminId);
 }

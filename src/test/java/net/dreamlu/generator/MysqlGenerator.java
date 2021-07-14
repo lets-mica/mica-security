@@ -112,7 +112,7 @@ public class MysqlGenerator {
 		// strategy.setEntityColumnConstant(true);
 		// 【实体】是否为构建者模型（默认 false）
 		// public User setName(String name) {this.name = name; return this;}
-		strategy.setEntityBuilderModel(false);
+		strategy.setChainModel(false);
 		strategy.setEntityLombokModel(true);
 		// 逻辑删除时，就查询不到该数据了，弃用
 //		strategy.setLogicDeleteFieldName("status");
