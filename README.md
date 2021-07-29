@@ -39,6 +39,11 @@ Spring boot 高效开发之 **Mica** 工具集：[https://gitee.com/596392912/mi
 
 ( Apache License v2.0 )
 
+## 鸣谢
+感谢 JetBrains 提供的免费开源 License：
+
+[![JetBrains](docs/img/jetbrains.png)](https://www.jetbrains.com/?from=mica-security)
+
 ### 微信公众号
 
 ![如梦技术](docs/img/dreamlu-weixin.jpg)
