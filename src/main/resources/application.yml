@@ -1,6 +1,8 @@
 spring:
   application:
     name: "mica-security"
+  profiles:
+    active: dev
   output:
     ansi:
       enabled: always
